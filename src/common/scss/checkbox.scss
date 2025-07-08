@@ -1,0 +1,70 @@
+input[type='checkbox'] {
+  /* 🔑 關鍵屬性：移除文字游標 */
+  caret-color: transparent !important;
+  cursor: pointer !important;
+  user-select: none !important;
+
+  /* 確保不會被當作文字輸入框 */
+  outline: none;
+
+  /* 隱藏原生 checkbox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* 設定尺寸和樣式 */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3c5464;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+
+  /* Hover 效果 */
+  //   &:hover {
+  //     border-color: #3C5464;
+  //   }
+
+  /* Focus 效果 */
+  //   &:focus {
+  //     outline: none;
+  //     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  //   }
+
+  /* 選中狀態 */
+  &:checked {
+    background-color: #3c5464;
+    border-color: #3c5464;
+
+    /* 勾選圖示 */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 1px;
+      left: 5px;
+      width: 6px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+  }
+
+  /* 禁用狀態 */
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover {
+      border-color: #d1d5db;
+    }
+  }
+
+  /* 禁用且選中狀態 */
+  &:disabled:checked {
+    background-color: #9ca3af;
+    border-color: #9ca3af;
+  }
+}
