@@ -1,4 +1,3 @@
-// src/components/common/Layout/Layout.tsx
 import React from 'react';
 import './Layout.scss';
 import { Footer } from '../Footer/Footer';
@@ -20,9 +19,7 @@ export const Layout: React.FC<LayoutProps> = ({
   return (
     <div className={`layout ${className}`}>
       {showHeader && <Header />}
-
       <main className="main">{children}</main>
-
       {showFooter && <Footer />}
     </div>
   );
