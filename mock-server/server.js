@@ -41,9 +41,9 @@ function readDB(filename) {
 // === API 路由 ===
 // 用戶路由
 app.get('/users', (req, res) => {
-  //   const users = readDB('users.json');
-  //   res.json(users);
-  res.status(401).json({ error: 'User not found' });
+  const users = readDB('users.json');
+  res.json(users);
+  // res.status(401).json({ error: 'User not found' });
 });
 
 // app.get('/users/:id', (req, res) => {

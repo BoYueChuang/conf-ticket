@@ -44,12 +44,6 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  // 🔥 提供重新檢查認證的方法（可供子組件使用）
-  const refreshAuth = () => {
-    setAuthStatus('checking');
-    checkAuth();
-  };
-
   // 🔥 如果正在檢查認證，顯示載入畫面
   if (authStatus === 'checking') {
     return (
@@ -71,9 +65,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
 
   // 🔥 認證通過，渲染子組件並傳遞用戶資訊
   return (
-    <AuthContext.Provider value={{ userInfo, refreshAuth }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ userInfo }}>{children}</AuthContext.Provider>
   );
 };
 
@@ -81,7 +73,6 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = React.createContext<{
   userInfo: any;
-  refreshAuth: () => void;
 } | null>(null);
 
 // 🔥 Custom Hook 方便子組件使用

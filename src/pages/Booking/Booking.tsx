@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Select } from '../../components/common/Select/Select';
 import { NotificationMessage } from '../../components/common/Notification/Notification';
 import { apiService } from '../../api/fetchService';
+import { useAuth } from '../../components/common/AuthGuard/AuthGuard';
 
 interface Option {
   id: string;
@@ -10,7 +11,7 @@ interface Option {
 
 export const Booking: React.FC = () => {
   const [selectedBranch, setSelectedBranch] = useState('');
-
+  const { userInfo } = useAuth();
   const branchOptions: Option[] = [
     { id: 'taipei', label: 'The Hope 台北分部' },
     { id: 'taichung', label: 'The Hope 台中分部' },
@@ -23,11 +24,11 @@ export const Booking: React.FC = () => {
       try {
         const data = await apiService.users.getAll();
         console.log('Tickets data:', data);
-
       } catch (error) {
         console.error('Error:', error);
       }
     };
+    console.log(userInfo, 'userInfo');
 
     loadData();
   }, []);
