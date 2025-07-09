@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select } from '../../components/common/Select/Select';
 import { NotificationMessage } from '../../components/common/Notification/Notification';
+import { apiService } from '../../api/fetchService';
 
 interface Option {
   id: string;
@@ -16,6 +17,20 @@ export const Booking: React.FC = () => {
     { id: 'online', label: 'The Hope 線上分部' },
     { id: 'others', label: '其他教會' },
   ];
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const data = await apiService.users.getAll();
+        console.log('Tickets data:', data);
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <div className="p-6">

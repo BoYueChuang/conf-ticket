@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "name": "陳志明",
+    "email": "john@example.com",
+    "phone": "0912-345-678",
+    "branch": "taipei",
+    "status": "active",
+    "createdAt": "2025-01-15T10:00:00Z"
+  },
+  {
+    "id": "2",
+    "name": "王美華",
+    "email": "mary@example.com",
+    "phone": "0923-456-789",
+    "branch": "taichung",
+    "status": "active",
+    "createdAt": "2025-01-14T14:30:00Z"
+  }
+]
