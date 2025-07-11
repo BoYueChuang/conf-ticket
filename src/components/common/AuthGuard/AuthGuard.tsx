@@ -15,7 +15,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // 🔥 檢查認證狀態
+  //  檢查認證狀態
   const checkAuth = async () => {
     try {
       // 調用 userinfo API 檢查認證狀態
@@ -38,13 +38,13 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
     }
   };
 
-  // 🔥 組件載入時檢查認證
+  //  組件載入時檢查認證
   useEffect(() => {
     checkAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
-  // 🔥 如果正在檢查認證，顯示載入畫面
+  //  如果正在檢查認證，顯示載入畫面
   if (authStatus === 'checking') {
     return (
       fallback || (
@@ -58,24 +58,24 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
     );
   }
 
-  // 🔥 如果未認證，顯示空白（因為會重定向）
+  //  如果未認證，顯示空白（因為會重定向）
   if (authStatus === 'unauthenticated') {
     return null;
   }
 
-  // 🔥 認證通過，渲染子組件並傳遞用戶資訊
+  //  認證通過，渲染子組件並傳遞用戶資訊
   return (
     <AuthContext.Provider value={{ userInfo }}>{children}</AuthContext.Provider>
   );
 };
 
-// 🔥 建立 Context 供子組件使用用戶資訊
+//  建立 Context 供子組件使用用戶資訊
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = React.createContext<{
   userInfo: any;
 } | null>(null);
 
-// 🔥 Custom Hook 方便子組件使用
+//  Custom Hook 方便子組件使用
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = React.useContext(AuthContext);

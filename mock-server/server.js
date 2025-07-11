@@ -56,15 +56,10 @@ app.get('/users', (req, res) => {
 //   }
 // });
 
-// app.post('/users', (req, res) => {
-//   const users = readDB('users.json');
-//   const newUser = {
-//     id: Date.now().toString(),
-//     ...req.body,
-//     createdAt: new Date().toISOString(),
-//   };
-//   users.push(newUser);
-// });
+app.post('/auth/login', (req, res) => {
+  const login = readDB('login.json');
+  res.json(login);
+});
 
 // // 票券路由
 // app.get('/tickets', (req, res) => {
