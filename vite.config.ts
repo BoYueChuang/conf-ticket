@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import EnvironmentPlugin from 'vite-plugin-environment'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import EnvironmentPlugin from 'vite-plugin-environment';
 
 export default defineConfig({
-  base: "/",
+  base: '/',
   plugins: [
     react(),
     EnvironmentPlugin(
@@ -19,21 +19,18 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    assetsDir: ".",
+    assetsDir: '.',
   },
   server: {
     host: true, // 讓 Vite 綁定 0.0.0.0，允許內網訪問
     port: 5173, // 可選，設定開發伺服器端口
-    allowedHosts: [
-      'localhost',
-      '127.0.0.1'
-    ],
+    allowedHosts: ['localhost', '127.0.0.1'],
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
   },
-})
+});

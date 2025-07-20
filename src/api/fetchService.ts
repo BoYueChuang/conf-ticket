@@ -42,7 +42,7 @@ class FetchService {
     if (token) {
       defaultOptions.headers = {
         ...defaultOptions.headers,
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       };
       console.log('🔑 Added Bearer token to request');
     }
@@ -69,7 +69,9 @@ class FetchService {
       }
 
       if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `HTTP Error: ${response.status} ${response.statusText}`
+        );
       }
 
       if (response.status === 204) {
@@ -127,7 +129,7 @@ const fetchClient = new FetchService('/api');
 export const apiService = {
   // 認證相關 API
   auth: {
-    login: async (credentials: { email: string; password: string }) => {
+    login: async (credentials: { email: string }) => {
       const response = await fetchClient.post('/auth/login', credentials);
       //  登入成功後自動儲存 token
       if (response.token) {
@@ -143,7 +145,9 @@ export const apiService = {
         // 先調用後端登出 API
         await fetchClient.post('/auth/logout', {});
       } catch (error) {
-        console.warn('⚠️ Backend logout failed, but clearing local token anyway');
+        console.warn(
+          '⚠️ Backend logout failed, but clearing local token anyway'
+        );
       } finally {
         // 清除本地 token
         fetchClient.clearToken();

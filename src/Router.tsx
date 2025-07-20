@@ -15,7 +15,14 @@ const AppRouter = () => {
     <Router>
       <Routes>
         {/* 不需要認證的路由 */}
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/login"
+          element={
+            <Layout>
+              <Login />
+            </Layout>
+          }
+        />
 
         {/* 需要認證的路由都包在 AuthGuard 中 */}
         <Route
