@@ -4,12 +4,14 @@ import './Login.scss';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState(''); // 🔥 新增 OTP state
   const [error, setError] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [otpError, setOtpError] = useState(''); // 🔥 OTP 專用錯誤訊息
+  const [isEmailSubmitted, setIsEmailSubmitted] = useState(false); // 🔥 重新命名，更清楚
   const [isLoading, setIsLoading] = useState(false);
 
   // 郵件格式驗證
-  const validateEmail = (emailValue: any) => {
+  const validateEmail = (emailValue: string) => {
     // 空值檢查
     if (!emailValue.trim()) {
       return '信箱為必填欄位';
@@ -24,77 +26,239 @@ export const Login: React.FC = () => {
     return '';
   };
 
-  // 輸入變更處理
+  // 🔥 OTP 驗證
+  const validateOTP = (otpValue: string) => {
+    if (!otpValue.trim()) {
+      return '驗證碼為必填欄位';
+    }
+
+    if (otpValue.length !== 6) {
+      return '請輸入6位數驗證碼';
+    }
+
+    if (!/^\d+$/.test(otpValue)) {
+      return '驗證碼只能包含數字';
+    }
+
+    return '';
+  };
+
+  // 輸入變更處理 - Email
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
 
-    // 即時驗證（如果已經提交過或有錯誤時）
-    if (isSubmitted || error) {
+    // 即時驗證
+    if (error) {
       const errorMessage = validateEmail(value);
       setError(errorMessage);
     }
   };
 
-  // 失去焦點時驗證
-  const handleBlur = () => {
+  // 🔥 輸入變更處理 - OTP
+  const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, ''); // 只允許數字
+    setOtp(value);
+
+    // 即時驗證
+    if (otpError) {
+      const errorMessage = validateOTP(value);
+      setOtpError(errorMessage);
+    }
+  };
+
+  // Email blur 驗證
+  const handleEmailBlur = () => {
     const errorMessage = validateEmail(email);
     setError(errorMessage);
   };
 
-  // 提交處理
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // 防止表單默認提交行為
+  // 🔥 OTP blur 驗證
+  const handleOTPBlur = () => {
+    const errorMessage = validateOTP(otp);
+    setOtpError(errorMessage);
+  };
+
+  // 🔥 第一步：提交 Email，發送 OTP
+  const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     try {
-      setIsSubmitted(true);
       setIsLoading(true);
+      setError('');
 
       const errorMessage = validateEmail(email);
-      setError(errorMessage);
-
-      if (!errorMessage) {
-        const data = await apiService.auth.login({
-          email,
-        });
-
-        console.log('登入成功：', data);
-        alert(`信箱驗證成功：${email}`);
-
-        // 登入成功後的處理，例如導向首頁
-        // navigate('/dashboard'); // 如果使用 react-router
-      } else {
+      if (errorMessage) {
+        setError(errorMessage);
+        return;
       }
+
+      // 🔥 調用發送 OTP 的 API
+      const response = await apiService.auth.auth({ email });
+
+      console.log('OTP 發送成功：', response);
+
+      // 🔥 成功後切換到 OTP 輸入階段
+      setIsEmailSubmitted(true);
+
+      // 可以顯示成功訊息
+      alert(`驗證碼已發送至：${email}`);
+
     } catch (error: any) {
-      console.error('登入失敗:', error.message);
+      console.error('發送 OTP 失敗:', error.message);
+      setError(error.message || '發送失敗，請稍後再試');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 組件邏輯
+  // 🔥 第二步：驗證 OTP，完成登入
+  const handleOTPSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      setIsLoading(true);
+      setOtpError('');
+
+      const errorMessage = validateOTP(otp);
+      if (errorMessage) {
+        setOtpError(errorMessage);
+        return;
+      }
+
+      // 🔥 調用驗證 OTP 的 API
+      const response = apiService.auth.authCallBack(otp);
+
+      console.log('登入成功：', response);
+
+      // 🔥 儲存 token（如果 API 有回傳）
+      if ((await response).token) {
+        apiService.auth.setToken((await response).token);
+      }
+
+      alert('登入成功！');
+
+      // 🔥 導向首頁或其他頁面
+      // navigate('/dashboard');
+
+    } catch (error: any) {
+      console.error('OTP 驗證失敗:', error.message);
+      setOtpError(error.message || 'OTP 驗證失敗，請檢查驗證碼');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 🔥 返回到 Email 輸入階段
+  const handleBackToEmail = () => {
+    setIsEmailSubmitted(false);
+    setOtp('');
+    setOtpError('');
+  };
+
+  // 🔥 重新發送 OTP
+  const handleResendOTP = async () => {
+    try {
+      setIsLoading(true);
+      setOtpError('');
+
+      const response = await apiService.auth.authCallBack(otp);
+      console.log('重新發送 OTP 成功：', response);
+      alert('驗證碼已重新發送');
+
+    } catch (error: any) {
+      console.error('重新發送失敗:', error.message);
+      setOtpError('重新發送失敗，請稍後再試');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 🔥 根據狀態渲染不同的表單
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="login-container">
-        <div className="mail-block">
-          <label htmlFor="mail">電子郵件</label>
-          {/* 抓取使用者輸入的電子郵件 */}
-          <input
-            id="mail"
-            className={`form-input ${error ? 'invaild' : 'vaild'}`}
-            type="text"
-            placeholder="請輸入電子郵件"
-            value={email}
-            onChange={handleEmailChange}
-            onBlur={handleBlur}
+    <div className="login-container">
+      {!isEmailSubmitted ? (
+        // 📧 第一階段：輸入 Email
+        <form onSubmit={handleEmailSubmit}>
+          <div className="form-block">
+            <label htmlFor="email">電子郵件</label>
+            <input
+              id="email"
+              className={`form-input ${error ? 'invalid' : 'valid'}`}
+              type="email"
+              placeholder="請輸入電子郵件"
+              value={email}
+              onChange={handleEmailChange}
+              onBlur={handleEmailBlur}
+              disabled={isLoading}
+              aria-label="請輸入電子郵件"
+              aria-required
+              required
+            />
+            {error && <p className="invaild-text">{error}</p>}
+          </div>
+
+          <button
+            className="send-btn"
+            type="submit"
             disabled={isLoading}
-            aria-label="請輸入電子郵件"
-            aria-required
-            required
-          />
-          {error && <p className="invaild-text">{error}</p>}
-        </div>
-        <input className="send-btn" type="submit" value="發送電子郵件"></input>
-      </div>
-    </form>
+          >發送電子郵件
+          </button>
+        </form>
+      ) : (
+        // 第二階段：輸入 OTP
+        <form onSubmit={handleOTPSubmit}>
+          <div className="otp-info">
+            <p>驗證碼已發送至：<strong>{email}</strong></p>
+            <button
+              type="button"
+              className="back-btn"
+              onClick={handleBackToEmail}
+            >
+              修改信箱
+            </button>
+          </div>
+
+          <div className="form-block">
+            <label htmlFor="otp">一次性密碼</label>
+            <input
+              id="otp"
+              className={`form-input ${otpError ? 'invalid' : 'valid'}`}
+              type="text"
+              placeholder="請輸入6位數驗證碼"
+              value={otp}
+              onChange={handleOTPChange}
+              onBlur={handleOTPBlur}
+              disabled={isLoading}
+              autoComplete="one-time-code" // 🔥 啟用 OTP 自動填入
+              inputMode="numeric"         // 🔥 手機顯示數字鍵盤
+              pattern="[0-9]*"           // 🔥 只允許數字
+              maxLength={6}              // 🔥 限制長度
+              aria-label="請輸入一次性密碼"
+              aria-required
+              required
+            />
+            {otpError && <p className="invalid-text">{otpError}</p>}
+          </div>
+
+          <button
+            className="send-btn"
+            type="submit"
+            disabled={isLoading}
+          >送出</button>
+
+          <div className="otp-actions">
+            <button
+              type="button"
+              className="resend-btn"
+              onClick={handleResendOTP}
+              disabled={isLoading}
+            >
+              重新發送驗證碼
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 };

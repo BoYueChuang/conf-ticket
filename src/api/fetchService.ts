@@ -129,8 +129,13 @@ const fetchClient = new FetchService('/api');
 export const apiService = {
   // 認證相關 API
   auth: {
-    login: async (credentials: { email: string }) => {
-      const response = await fetchClient.post('/auth/login', credentials);
+    auth: async (email: { email: string }) => {
+      const response = await fetchClient.post('/v1/auth', email);
+      return response;
+    },
+
+    authCallBack: async (otp: string): Promise<{ token: string }> => {
+      const response = await fetchClient.get(`/v1/auth/callback?t=${otp}`);
       //  登入成功後自動儲存 token
       if (response.token) {
         fetchClient.setToken(response.token);

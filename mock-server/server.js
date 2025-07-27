@@ -56,8 +56,13 @@ app.get('/users', (req, res) => {
 //   }
 // });
 
-app.post('/auth/login', (req, res) => {
-  const login = readDB('login.json');
+app.post('/v1/auth', (req, res) => {
+  const login = readDB('auth.json');
+  res.json(login);
+});
+
+app.get('/v1/auth/callback', (req, res) => {
+  const login = readDB('authCallBack.json');
   res.json(login);
 });
 
