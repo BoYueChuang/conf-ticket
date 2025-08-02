@@ -1,30 +1,54 @@
 .login-container {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+  padding: 100px 0;
+  max-width: 426px;
+  width: 100%;
+  margin: 0 auto;
 
-  .form-block {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .login-form {
+    border-radius: 12px;
+    background: #fff;
+    padding: 28px 32px 40px 32px;
+
+    .form-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      h1 {
+        text-align: center;
+        color: #000;
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 44px;
+        margin-bottom: 16px;
+      }
+
+      .form-description {
+        color: #000;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+        margin-bottom: 40px;
+      }
+
+      label {
+        color: #000;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 24px;
+      }
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+    }
   }
+}
 
-  .send-btn {
-    width: 224px;
-    padding: 10px 24px 10px 24px;
-    border-radius: 44px;
-    border: 1px solid #ffcc32;
-    background: #ffcc32;
-    color: #090c0e;
-    text-align: center;
-    cursor: pointer;
+.m-t-40 {
+  margin-top: 40px;
+}
 
-    /* component/button/large */
-    font-family: 'Noto Sans TC';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 24px;
-    /* 150% */
-  }
+@media screen and (max-width: 768px) {
 }

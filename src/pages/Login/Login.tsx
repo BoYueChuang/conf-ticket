@@ -103,7 +103,6 @@ export const Login: React.FC = () => {
 
       // 可以顯示成功訊息
       alert(`驗證碼已發送至：${email}`);
-
     } catch (error: any) {
       console.error('發送 OTP 失敗:', error.message);
       setError(error.message || '發送失敗，請稍後再試');
@@ -140,7 +139,6 @@ export const Login: React.FC = () => {
 
       // 🔥 導向首頁或其他頁面
       // navigate('/dashboard');
-
     } catch (error: any) {
       console.error('OTP 驗證失敗:', error.message);
       setOtpError(error.message || 'OTP 驗證失敗，請檢查驗證碼');
@@ -165,7 +163,6 @@ export const Login: React.FC = () => {
       const response = await apiService.auth.authCallBack(otp);
       console.log('重新發送 OTP 成功：', response);
       alert('驗證碼已重新發送');
-
     } catch (error: any) {
       console.error('重新發送失敗:', error.message);
       setOtpError('重新發送失敗，請稍後再試');
@@ -179,8 +176,12 @@ export const Login: React.FC = () => {
     <div className="login-container">
       {!isEmailSubmitted ? (
         // 📧 第一階段：輸入 Email
-        <form onSubmit={handleEmailSubmit}>
+        <form onSubmit={handleEmailSubmit} className="login-form">
           <div className="form-block">
+            <h1>登入/註冊帳戶</h1>
+            <p className="form-description">
+              請輸入您的電子郵件地址，並按下「發送電子郵件」，您將收到來自conf@thehope.co寄送的一次性密碼。
+            </p>
             <label htmlFor="email">電子郵件</label>
             <input
               id="email"
@@ -198,18 +199,23 @@ export const Login: React.FC = () => {
             {error && <p className="invaild-text">{error}</p>}
           </div>
 
-          <button
-            className="send-btn"
-            type="submit"
-            disabled={isLoading}
-          >發送電子郵件
-          </button>
+          <div className="btn-container">
+            <button
+              className="send-btn m-t-40"
+              type="submit"
+              disabled={isLoading}
+            >
+              發送電子郵件
+            </button>
+          </div>
         </form>
       ) : (
         // 第二階段：輸入 OTP
-        <form onSubmit={handleOTPSubmit}>
+        <form onSubmit={handleOTPSubmit} className="login-form">
           <div className="otp-info">
-            <p>驗證碼已發送至：<strong>{email}</strong></p>
+            <p>
+              驗證碼已發送至：<strong>{email}</strong>
+            </p>
             <button
               type="button"
               className="back-btn"
@@ -231,9 +237,9 @@ export const Login: React.FC = () => {
               onBlur={handleOTPBlur}
               disabled={isLoading}
               autoComplete="one-time-code" // 🔥 啟用 OTP 自動填入
-              inputMode="numeric"         // 🔥 手機顯示數字鍵盤
-              pattern="[0-9]*"           // 🔥 只允許數字
-              maxLength={6}              // 🔥 限制長度
+              inputMode="numeric" // 🔥 手機顯示數字鍵盤
+              pattern="[0-9]*" // 🔥 只允許數字
+              maxLength={6} // 🔥 限制長度
               aria-label="請輸入一次性密碼"
               aria-required
               required
@@ -241,11 +247,11 @@ export const Login: React.FC = () => {
             {otpError && <p className="invalid-text">{otpError}</p>}
           </div>
 
-          <button
-            className="send-btn"
-            type="submit"
-            disabled={isLoading}
-          >送出</button>
+          <div className="btn-container">
+            <button className="send-btn" type="submit" disabled={isLoading}>
+              送出
+            </button>
+          </div>
 
           <div className="otp-actions">
             <button
