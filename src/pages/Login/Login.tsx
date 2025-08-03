@@ -100,9 +100,6 @@ export const Login: React.FC = () => {
 
       // 🔥 成功後切換到 OTP 輸入階段
       setIsEmailSubmitted(true);
-
-      // 可以顯示成功訊息
-      alert(`驗證碼已發送至：${email}`);
     } catch (error: any) {
       console.error('發送 OTP 失敗:', error.message);
       setError(error.message || '發送失敗，請稍後再試');
@@ -135,8 +132,6 @@ export const Login: React.FC = () => {
         apiService.auth.setToken((await response).token);
       }
 
-      alert('登入成功！');
-
       // 🔥 導向首頁或其他頁面
       // navigate('/dashboard');
     } catch (error: any) {
@@ -162,7 +157,6 @@ export const Login: React.FC = () => {
 
       const response = await apiService.auth.authCallBack(otp);
       console.log('重新發送 OTP 成功：', response);
-      alert('驗證碼已重新發送');
     } catch (error: any) {
       console.error('重新發送失敗:', error.message);
       setOtpError('重新發送失敗，請稍後再試');
@@ -212,26 +206,19 @@ export const Login: React.FC = () => {
       ) : (
         // 第二階段：輸入 OTP
         <form onSubmit={handleOTPSubmit} className="login-form">
-          <div className="otp-info">
-            <p>
-              驗證碼已發送至：<strong>{email}</strong>
-            </p>
-            <button
-              type="button"
-              className="back-btn"
-              onClick={handleBackToEmail}
-            >
-              修改信箱
-            </button>
-          </div>
-
           <div className="form-block">
+            <h1>密碼已發送</h1>
+            <p className="form-description">
+              系統已發送一次性密碼至：{email}
+              <br />
+              請前往您的電子郵件查看，並於下方輸入。
+            </p>
             <label htmlFor="otp">一次性密碼</label>
             <input
               id="otp"
               className={`form-input ${otpError ? 'invalid' : 'valid'}`}
               type="text"
-              placeholder="請輸入6位數驗證碼"
+              placeholder="請輸入一次性密碼"
               value={otp}
               onChange={handleOTPChange}
               onBlur={handleOTPBlur}
@@ -244,24 +231,24 @@ export const Login: React.FC = () => {
               aria-required
               required
             />
-            {otpError && <p className="invalid-text">{otpError}</p>}
+            {otpError && <p className="invaild-text">{otpError}</p>}
           </div>
 
           <div className="btn-container">
-            <button className="send-btn" type="submit" disabled={isLoading}>
-              送出
+            <button
+              className="send-btn m-t-40"
+              type="submit"
+              disabled={isLoading}
+            >
+              發送電子郵件
             </button>
           </div>
 
           <div className="otp-actions">
-            <button
-              type="button"
-              className="resend-btn"
-              onClick={handleResendOTP}
-              disabled={isLoading}
-            >
-              重新發送驗證碼
-            </button>
+            <p>沒有收到郵件？</p>
+            <p className="resend-otp" onClick={handleResendOTP}>
+              重新發送
+            </p>
           </div>
         </form>
       )}
