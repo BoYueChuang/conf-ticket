@@ -12,7 +12,6 @@
     .form-block {
       display: flex;
       flex-direction: column;
-      gap: 8px;
 
       h1 {
         text-align: center;
@@ -29,6 +28,7 @@
         font-weight: 400;
         line-height: 24px;
         margin-bottom: 40px;
+        text-align: justify;
       }
 
       label {
@@ -36,6 +36,7 @@
         font-size: 16px;
         font-weight: 400;
         line-height: 24px;
+        margin-bottom: 8px;
       }
     }
 
@@ -51,4 +52,18 @@
 }
 
 @media screen and (max-width: 768px) {
+  .login-container {
+    // 上 60 下 100
+    padding: 60px 12px 100px 12px;
+
+    .login-form {
+      padding: 28px 20px 40px 20px;
+
+      .form-block {
+        h1 {
+          font-size: 24px;
+        }
+      }
+    }
+  }
 }
