@@ -18,7 +18,24 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
   //  檢查認證狀態
   const checkAuth = async () => {
     try {
-      // 調用 userinfo API 檢查認證狀態
+      // 🔍 首先檢查 localStorage 中的 token
+      const token = localStorage.getItem('auth_token');
+
+      if (!token) {
+        console.log('❌ AuthGuard: No auth_token found in localStorage');
+        setAuthStatus('unauthenticated');
+        setUserInfo(null);
+
+        // 重定向到登入頁面
+        console.log('🔄 AuthGuard: Redirecting to login...');
+        navigate('/login', {
+          replace: true,
+          state: { from: location.pathname }, // 記住來源頁面
+        });
+        return;
+      }
+
+      // 🔍 如果有 token，調用 userinfo API 檢查認證狀態
       const response = await apiService.users.getAll();
 
       console.log('✅ AuthGuard: Authentication passed:', response);
@@ -26,6 +43,10 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
       setUserInfo(response);
     } catch (error: any) {
       console.log('❌ AuthGuard: Authentication failed:', error.message);
+
+      // 🧹 API 失敗時清除 localStorage 中的 token
+      localStorage.removeItem('auth_token');
+
       setAuthStatus('unauthenticated');
       setUserInfo(null);
 

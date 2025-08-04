@@ -1,18 +1,18 @@
 import React from 'react';
 import './Header.scss';
-import { useHeaderHeight } from '../../../contexts/HeaderHeightContext';
 
 export interface HeaderProps {
   title?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({ title = 'CONF TICKET' }) => {
-  const { headerRef } = useHeaderHeight();
+  // local storage 裡是否有 auth_token
+  const token = localStorage.getItem('auth_token');
 
   return (
-    <header className="header" ref={headerRef}>
+    <header className="header">
       <img src="/src/assets/images/logo.png" alt="" />
-      <p>前往票券系統</p>
+      <p>{token ? '登出' : '前往票券系統'}</p>
     </header>
   );
 };

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { apiService } from '../../api/fetchService';
 import './Login.scss';
+import { useNavigate } from 'react-router-dom';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -9,6 +10,7 @@ export const Login: React.FC = () => {
   const [otpError, setOtpError] = useState(''); // 🔥 OTP 專用錯誤訊息
   const [isEmailSubmitted, setIsEmailSubmitted] = useState(false); // 🔥 重新命名，更清楚
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   // 郵件格式驗證
   const validateEmail = (emailValue: string) => {
@@ -132,21 +134,17 @@ export const Login: React.FC = () => {
         apiService.auth.setToken((await response).token);
       }
 
-      // 🔥 導向首頁或其他頁面
-      // navigate('/dashboard');
+      // 登入成功後導向 profile，並傳遞狀態
+      navigate('/profile', {
+        replace: true,
+        state: { fromLogin: true },
+      });
     } catch (error: any) {
       console.error('OTP 驗證失敗:', error.message);
       setOtpError(error.message || 'OTP 驗證失敗，請檢查驗證碼');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // 🔥 返回到 Email 輸入階段
-  const handleBackToEmail = () => {
-    setIsEmailSubmitted(false);
-    setOtp('');
-    setOtpError('');
   };
 
   // 🔥 重新發送 OTP
