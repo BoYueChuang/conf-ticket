@@ -1,5 +1,4 @@
 .login-container {
-  padding: 100px 0;
   max-width: 426px;
   width: 100%;
   margin: 0 auto;
@@ -53,7 +52,7 @@
       justify-content: center;
       .resend-otp {
         color: #3c5464;
-        font-weight: 600;
+        font-weight: 400;
         text-decoration-line: underline;
         text-decoration-style: solid;
         text-decoration-skip-ink: none;
@@ -61,6 +60,11 @@
         text-underline-offset: auto;
         text-underline-position: from-font;
         cursor: pointer;
+      }
+
+      .disabled {
+        color: #a5a9ab;
+        cursor: auto;
       }
     }
   }
@@ -72,9 +76,6 @@
 
 @media screen and (max-width: 768px) {
   .login-container {
-    // 上 60 下 100
-    padding: 60px 12px 100px 12px;
-
     .login-form {
       padding: 28px 20px 40px 20px;
 

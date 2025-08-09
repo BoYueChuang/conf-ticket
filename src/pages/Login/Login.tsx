@@ -1,16 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { apiService } from '../../api/fetchService';
 import './Login.scss';
-import { useNavigate } from 'react-router-dom';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState(''); // 🔥 新增 OTP state
   const [error, setError] = useState('');
-  const [otpError, setOtpError] = useState(''); // 🔥 OTP 專用錯誤訊息
   const [isEmailSubmitted, setIsEmailSubmitted] = useState(false); // 🔥 重新命名，更清楚
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   // 郵件格式驗證
   const validateEmail = (emailValue: string) => {
@@ -28,23 +24,6 @@ export const Login: React.FC = () => {
     return '';
   };
 
-  // 🔥 OTP 驗證
-  const validateOTP = (otpValue: string) => {
-    if (!otpValue.trim()) {
-      return '驗證碼為必填欄位';
-    }
-
-    if (otpValue.length !== 6) {
-      return '請輸入6位數驗證碼';
-    }
-
-    if (!/^\d+$/.test(otpValue)) {
-      return '驗證碼只能包含數字';
-    }
-
-    return '';
-  };
-
   // 輸入變更處理 - Email
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -57,31 +36,13 @@ export const Login: React.FC = () => {
     }
   };
 
-  // 🔥 輸入變更處理 - OTP
-  const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, ''); // 只允許數字
-    setOtp(value);
-
-    // 即時驗證
-    if (otpError) {
-      const errorMessage = validateOTP(value);
-      setOtpError(errorMessage);
-    }
-  };
-
   // Email blur 驗證
   const handleEmailBlur = () => {
     const errorMessage = validateEmail(email);
     setError(errorMessage);
   };
 
-  // 🔥 OTP blur 驗證
-  const handleOTPBlur = () => {
-    const errorMessage = validateOTP(otp);
-    setOtpError(errorMessage);
-  };
-
-  // 🔥 第一步：提交 Email，發送 OTP
+  // 第一步：提交 Email，發送登入連結至信箱
   const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -95,12 +56,12 @@ export const Login: React.FC = () => {
         return;
       }
 
-      // 🔥 調用發送 OTP 的 API
+      // 調用發送 OTP 的 API
       const response = await apiService.auth.auth({ email });
 
       console.log('OTP 發送成功：', response);
 
-      // 🔥 成功後切換到 OTP 輸入階段
+      // 成功後切換到 OTP 輸入階段
       setIsEmailSubmitted(true);
     } catch (error: any) {
       console.error('發送 OTP 失敗:', error.message);
@@ -110,64 +71,56 @@ export const Login: React.FC = () => {
     }
   };
 
-  // 🔥 第二步：驗證 OTP，完成登入
-  const handleOTPSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      setIsLoading(true);
-      setOtpError('');
-
-      const errorMessage = validateOTP(otp);
-      if (errorMessage) {
-        setOtpError(errorMessage);
-        return;
-      }
-
-      // 🔥 調用驗證 OTP 的 API
-      const response = apiService.auth.authCallBack(otp);
-
-      console.log('登入成功：', response);
-
-      // 🔥 儲存 token（如果 API 有回傳）
-      if ((await response).token) {
-        apiService.auth.setToken((await response).token);
-      }
-
-      // 登入成功後導向 profile，並傳遞狀態
-      navigate('/profile', {
-        replace: true,
-        state: { fromLogin: true },
-      });
-    } catch (error: any) {
-      console.error('OTP 驗證失敗:', error.message);
-      setOtpError(error.message || 'OTP 驗證失敗，請檢查驗證碼');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 🔥 重新發送 OTP
+  // 重新發送 email
   const handleResendOTP = async () => {
+    if (timerSeconds > 0) return;
     try {
       setIsLoading(true);
-      setOtpError('');
 
-      const response = await apiService.auth.authCallBack(otp);
-      console.log('重新發送 OTP 成功：', response);
+      const response = await apiService.auth.auth({ email });
+      resetTimer();
+      console.log('OTP 發送成功：', response);
     } catch (error: any) {
       console.error('重新發送失敗:', error.message);
-      setOtpError('重新發送失敗，請稍後再試');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 🔥 根據狀態渲染不同的表單
+  const [timerSeconds, setTimerSeconds] = useState(300); // 5分鐘 = 300秒
+
+  useEffect(() => {
+    if (timerSeconds <= 0) return; // 當計時器歸零時停止
+
+    const interval = setInterval(() => {
+      setTimerSeconds(prevSeconds => {
+        if (prevSeconds <= 1) {
+          return 0; // 確保不會變成負數
+        }
+        return prevSeconds - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timerSeconds]);
+
+  // 格式化時間為 MM:SS
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}分:${remainingSeconds.toString().padStart(2, '0')}秒`;
+  };
+
+  // 重置計時器
+  const resetTimer = () => {
+    setTimerSeconds(300);
+  };
+
+  // 根據狀態渲染不同的表單
   return (
     <div className="login-container">
       {!isEmailSubmitted ? (
-        // 📧 第一階段：輸入 Email
+        // 第一階段：輸入 Email
         <form onSubmit={handleEmailSubmit} className="login-form">
           <div className="form-block">
             <h1>登入/註冊帳戶</h1>
@@ -193,7 +146,7 @@ export const Login: React.FC = () => {
 
           <div className="btn-container">
             <button
-              className="send-btn m-t-40"
+              className="btn send-btn m-t-40"
               type="submit"
               disabled={isLoading}
             >
@@ -202,53 +155,29 @@ export const Login: React.FC = () => {
           </div>
         </form>
       ) : (
-        // 第二階段：輸入 OTP
-        <form onSubmit={handleOTPSubmit} className="login-form">
+        // 第二階段：登入連結已發送
+        <div className="login-form">
           <div className="form-block">
-            <h1>密碼已發送</h1>
+            <h1>登入連結已發送</h1>
             <p className="form-description">
-              系統已發送一次性密碼至：{email}
+              系統已將登入連結寄至 {email}
               <br />
-              請前往您的電子郵件查看，並於下方輸入。
+              ，請前往您填寫的信箱，點擊信件中的連結登入票券系統。
             </p>
-            <label htmlFor="otp">一次性密碼</label>
-            <input
-              id="otp"
-              className={`form-input ${otpError ? 'invalid' : 'valid'}`}
-              type="text"
-              placeholder="請輸入一次性密碼"
-              value={otp}
-              onChange={handleOTPChange}
-              onBlur={handleOTPBlur}
-              disabled={isLoading}
-              autoComplete="one-time-code" // 🔥 啟用 OTP 自動填入
-              inputMode="numeric" // 🔥 手機顯示數字鍵盤
-              pattern="[0-9]*" // 🔥 只允許數字
-              maxLength={6} // 🔥 限制長度
-              aria-label="請輸入一次性密碼"
-              aria-required
-              required
-            />
-            {otpError && <p className="invaild-text">{otpError}</p>}
-          </div>
-
-          <div className="btn-container">
-            <button
-              className="send-btn m-t-40"
-              type="submit"
-              disabled={isLoading}
-            >
-              發送電子郵件
-            </button>
           </div>
 
           <div className="otp-actions">
             <p>沒有收到郵件？</p>
-            <p className="resend-otp" onClick={handleResendOTP}>
-              重新發送
+            <p
+              className={`${timerSeconds > 0 ? 'disabled' : ''} resend-otp`}
+              onClick={handleResendOTP}
+            >
+              {timerSeconds > 0
+                ? `${formatTime(timerSeconds)}可重新發送`
+                : '重新發送'}
             </p>
           </div>
-        </form>
+        </div>
       )}
     </div>
   );

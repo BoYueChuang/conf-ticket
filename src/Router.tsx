@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { Layout } from './components/common/Layout/Layout';
 import { AuthGuard } from './components/common/AuthGuard/AuthGuard';
 import { Booking } from './pages/Booking/Booking';
@@ -39,6 +44,8 @@ const AppRouter = () => {
                     path="/distribution"
                     element={<TicketDistribution />}
                   />
+                  {/* 捕獲所有未匹配的路由，重定向到首頁 */}
+                  <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </Layout>
             </AuthGuard>

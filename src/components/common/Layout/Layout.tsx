@@ -19,14 +19,7 @@ export const Layout: React.FC<LayoutProps> = ({
   return (
     <div className={`layout ${className}`}>
       {showHeader && <Header />}
-      <main
-        className="main"
-        style={{
-          paddingTop: 60 + 'px',
-        }}
-      >
-        {children}
-      </main>
+      <main className="main">{children}</main>
       {showFooter && <Footer />}
     </div>
   );

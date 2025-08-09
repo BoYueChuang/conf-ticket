@@ -10,7 +10,7 @@
   background: #ffffff;
   opacity: 1;
   transition: opacity 0.3s ease-out;
-  position: absolute;
+  position: fixed;
   top: 73px;
   left: 50%;
   transform: translateX(-50%);
@@ -37,5 +37,11 @@
     line-height: 24px;
     letter-spacing: 0%;
     margin: 0; // 移除預設 margin
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .notification-container {
+    width: 85%;
   }
 }

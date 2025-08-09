@@ -1,18 +1,30 @@
-.send-btn {
+.btn {
   width: 224px;
   padding: 10px 24px 10px 24px;
   border-radius: 44px;
-  border: 1px solid #ffcc32;
   background: #ffcc32;
   color: #090c0e;
   text-align: center;
   cursor: pointer;
-
-  /* component/button/large */
-  font-family: 'Noto Sans TC';
+  text-align: center;
   font-size: 16px;
-  font-style: normal;
   font-weight: 500;
-  line-height: 24px;
-  /* 150% */
+  box-sizing: border-box;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #e5e7eb !important;
+    color: #9ca3af !important;
+  }
+}
+
+.send-btn {
+  background: #ffcc32;
+  color: #000;
+}
+
+.cancel-btn {
+  background: #3c5464;
+  color: #fff;
 }
