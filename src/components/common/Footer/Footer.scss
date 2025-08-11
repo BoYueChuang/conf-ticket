@@ -58,8 +58,12 @@
   .footer-info {
     padding: 10px 16px;
 
-    div {
+    .footer-links {
       gap: 10px;
+
+      p {
+        cursor: pointer;
+      }
     }
   }
 }

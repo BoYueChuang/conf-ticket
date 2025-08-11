@@ -28,3 +28,10 @@
   background: #3c5464;
   color: #fff;
 }
+
+
+@media screen and (max-width: 768px) {
+  .btn {
+    width: 176px;
+  }
+}

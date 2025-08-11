@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiService } from '../../api/fetchService';
+import { apiService, fetchClient } from '../../api/fetchService';
 import './Login.scss';
 
 export const Login: React.FC = () => {
@@ -7,6 +7,22 @@ export const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [isEmailSubmitted, setIsEmailSubmitted] = useState(false); // 🔥 重新命名，更清楚
   const [isLoading, setIsLoading] = useState(false);
+  const [timerSeconds, setTimerSeconds] = useState(300); // 5分鐘
+
+  useEffect(() => {
+    if (timerSeconds <= 0) return; // 當計時器歸零時停止
+
+    const interval = setInterval(() => {
+      setTimerSeconds(prevSeconds => {
+        if (prevSeconds <= 1) {
+          return 0; // 確保不會變成負數
+        }
+        return prevSeconds - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timerSeconds]);
 
   // 郵件格式驗證
   const validateEmail = (emailValue: string) => {
@@ -58,6 +74,7 @@ export const Login: React.FC = () => {
 
       // 調用發送 OTP 的 API
       const response = await apiService.auth.auth({ email });
+      fetchClient.setToken('sadasasdas');
 
       console.log('OTP 發送成功：', response);
 
@@ -87,28 +104,11 @@ export const Login: React.FC = () => {
     }
   };
 
-  const [timerSeconds, setTimerSeconds] = useState(300); // 5分鐘 = 300秒
-
-  useEffect(() => {
-    if (timerSeconds <= 0) return; // 當計時器歸零時停止
-
-    const interval = setInterval(() => {
-      setTimerSeconds(prevSeconds => {
-        if (prevSeconds <= 1) {
-          return 0; // 確保不會變成負數
-        }
-        return prevSeconds - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timerSeconds]);
-
   // 格式化時間為 MM:SS
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}分:${remainingSeconds.toString().padStart(2, '0')}秒`;
+    return `${minutes}分${remainingSeconds.toString().padStart(2, '0')}秒`;
   };
 
   // 重置計時器

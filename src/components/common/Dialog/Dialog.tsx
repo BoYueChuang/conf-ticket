@@ -2,6 +2,7 @@ import React from 'react';
 import './Dialog.scss';
 
 interface DialogProps {
+  isShowButton?: boolean; // 是否顯示確認和取消按鈕
   isOpen: boolean;
   onClose: () => void;
   title: string;
@@ -27,6 +28,7 @@ const Dialog: React.FC<DialogProps> = ({
   showCloseButton = true,
   className = '',
   requireScrollToBottom = false,
+  isShowButton = true, // 是否顯示確認和取消按鈕
 }) => {
   const [canConfirm, setCanConfirm] = React.useState(!requireScrollToBottom);
   const contentRef = React.useRef<HTMLDivElement>(null);
@@ -92,23 +94,26 @@ const Dialog: React.FC<DialogProps> = ({
           className="dialog-content"
           ref={contentRef}
           onScroll={handleScroll}
+          style={{ marginBottom: isShowButton ? '0' : '40px' }}
         >
           {children}
         </div>
 
         {/* 按鈕區域 */}
-        <div className="dialog-actions">
-          <button
-            className="btn send-btn"
-            onClick={handleConfirm}
-            disabled={!canConfirm}
-          >
-            {confirmText}
-          </button>
-          <button className="btn cancel-btn" onClick={handleCancel}>
-            {cancelText}
-          </button>
-        </div>
+        {isShowButton && (
+          <div className="dialog-actions">
+            <button
+              className="btn send-btn"
+              onClick={handleConfirm}
+              disabled={!canConfirm}
+            >
+              {confirmText}
+            </button>
+            <button className="btn cancel-btn" onClick={handleCancel}>
+              {cancelText}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ export const Main: React.FC = () => {
       {showNotification && (
         <NotificationMessage
           status="success"
-          text="您已成功註冊The Hope 您的個人檔案已儲存成功"
+          text="您的個人檔案已儲存成功"
           onClose={() => setShowNotification('')}
         />
       )}
@@ -30,15 +30,15 @@ export const Main: React.FC = () => {
         <div className="main-buttons">
           <div className="button-block">
             <p>購買票券</p>
-            <img src="/src/assets/images/main-arrow-icon.svg" alt="" />
+            <img src="/src/assets/images/black-arrow-right-icon.svg" alt="" />
           </div>
           <div className="button-block">
             <p>我的票券</p>
-            <img src="/src/assets/images/main-arrow-icon.svg" alt="" />
+            <img src="/src/assets/images/black-arrow-right-icon.svg" alt="" />
           </div>
           <div className="button-block">
             <p>個人檔案</p>
-            <img src="/src/assets/images/main-arrow-icon.svg" alt="" />
+            <img src="/src/assets/images/black-arrow-right-icon.svg" alt="" />
           </div>
         </div>
       </div>

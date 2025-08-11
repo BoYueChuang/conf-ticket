@@ -15,7 +15,7 @@
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  max-width: 500px;
+  max-width: 590px;
   width: 90%;
   max-height: 80vh;
   overflow: hidden;
@@ -103,7 +103,7 @@
   }
 
   .dialog-content {
-    padding: 0px 5px 0px 24px;
+    padding: 0px 9px 0px 17px;
   }
 
   .dialog-title {
@@ -126,6 +126,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -136,6 +137,7 @@
     transform: scale(0.95) translateY(-10px);
     opacity: 0;
   }
+
   to {
     transform: scale(1) translateY(0);
     opacity: 1;
@@ -152,6 +154,7 @@
 
 // 可選的變體樣式
 .dialog-container {
+
   // 小型對話框
   &.dialog-small {
     max-width: 400px;
