@@ -10,6 +10,7 @@
   font-size: 16px;
   font-weight: 500;
   box-sizing: border-box;
+  margin: 0 auto;
 
   &:disabled {
     opacity: 0.4;
@@ -28,7 +29,6 @@
   background: #3c5464;
   color: #fff;
 }
-
 
 @media screen and (max-width: 768px) {
   .btn {

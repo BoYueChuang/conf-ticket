@@ -1,10 +1,13 @@
-import React from "react";
-import Dialog from "../../components/common/Dialog/Dialog";
-import "./Refund.scss";
+import React from 'react';
+import Dialog from '../../components/common/Dialog/Dialog';
+import './Refund.scss';
+import { useNavigate } from 'react-router-dom';
 
 export const Refund: React.FC = () => {
+  const navigate = useNavigate();
   const [isRefundDialogOpen, setRefundDialogOpen] = React.useState(false);
-  const [isRefundCheckBoxDisabled, setRefundCheckBoxDisabled] = React.useState(true);
+  const [isRefundCheckBoxDisabled, setRefundCheckBoxDisabled] =
+    React.useState(true);
   const [isCheckboxChecked, setIsCheckboxChecked] = React.useState(false);
 
   const handleRefundConfirm = () => {
@@ -20,6 +23,16 @@ export const Refund: React.FC = () => {
     setIsCheckboxChecked(!isCheckboxChecked);
   };
 
+  // 確定退票
+  const Submit = () => {
+    navigate('/refund/success', {
+      state: {
+        type: 'success',
+        message:
+          '退款金額將於 10 個工作天內退回至您的原付款方式，如需開立發票請寄信至conf@thehope.co',
+      },
+    });
+  };
 
   // 組件邏輯
   return (
@@ -27,12 +40,22 @@ export const Refund: React.FC = () => {
       <div className="refund-header">
         <h1>建立個人檔案</h1>
         <div className="refund-header-content">
-          <p className="refund-header-content-title">退票申請前，請詳閱以下退票需知：</p>
+          <p className="refund-header-content-title">
+            退票申請前，請詳閱以下退票需知：
+          </p>
           <div>
             <ul className="refund-header-content-list">
-              <li><span className="number">1.</span>退款將酌收 10% 手續費</li>
-              <li><span className="number">2.</span>退款金額將於 10 個工作天內退回至您的原付款方式</li>
-              <li><span className="number">3.</span>退票僅能整筆申請退款，無法部分退票</li>
+              <li>
+                <span className="number">1.</span>退款將酌收 10% 手續費
+              </li>
+              <li>
+                <span className="number">2.</span>退款金額將於 10
+                個工作天內退回至您的原付款方式
+              </li>
+              <li>
+                <span className="number">3.</span>
+                退票僅能整筆申請退款，無法部分退票
+              </li>
             </ul>
           </div>
         </div>
@@ -54,7 +77,9 @@ export const Refund: React.FC = () => {
           </div>
           <div className="refund-content-info-item">
             <p className="refund-content-info-item-label">使用日期</p>
-            <p className="refund-content-info-item-content">2026.05.01-2026.05.03</p>
+            <p className="refund-content-info-item-content">
+              2026.05.01-2026.05.03
+            </p>
           </div>
         </div>
       </div>
@@ -76,12 +101,14 @@ export const Refund: React.FC = () => {
         </button>
       </div>
       <div className="refund-button">
-        <button className="btn send-btn" disabled={!isCheckboxChecked}>
+        <button
+          className="btn send-btn"
+          disabled={!isCheckboxChecked}
+          onClick={Submit}
+        >
           確定退票
         </button>
-        <button className="btn cancel-btn">
-          取消
-        </button>
+        <button className="btn cancel-btn">取消</button>
       </div>
 
       <Dialog

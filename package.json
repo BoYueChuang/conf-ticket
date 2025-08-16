@@ -13,6 +13,7 @@
     "mock-server:dev": "nodemon --watch mock-server --ext js,json mock-server/server.js",
     "dev-with-api": "concurrently \"pnpm run dev\" \"pnpm run mock-server:dev\"",
     "dev-simple": "concurrently \"pnpm run dev\" \"pnpm run mock-server:watch\"",
+    "generate": "java -jar openapi-generator-cli-7.9.0.jar generate -i http://localhost:3000/api/v1/docs/openapi.json -g typescript-angular -o ./generated-client --skip-validate-spec --additional-properties=serviceSuffix=ApiService,fileNaming=kebab-case,modelFileSuffix=.model,apiPackage=api,modelPackage=model",
     "start": "pnpm run dev-with-api"
   },
   "dependencies": {

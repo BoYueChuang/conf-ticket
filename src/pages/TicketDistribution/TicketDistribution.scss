@@ -1,0 +1,81 @@
+.distribution-container {
+  max-width: 386px;
+  width: 100%;
+  padding: 28px 32px 40px 32px;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 12px;
+
+  .distribution-header {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    h1 {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 600;
+    }
+
+    .distribution-header-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+
+      .distribution-header-content-title {
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 28px;
+      }
+
+      .distribution-header-content-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .distribution-header-content-info-item {
+          display: flex;
+          gap: 16px;
+
+          .distribution-header-content-info-item-label {
+            font-size: 16px;
+            line-height: 24px;
+            color: #000;
+          }
+
+          .distribution-header-content-info-item-content {
+            color: #ee1b0a;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 24px;
+          }
+        }
+      }
+    }
+  }
+
+  .distribution-form {
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+    margin-bottom: 60px;
+    .distribution-form-title {
+      color: #000;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 28px;
+    }
+
+    .distribution-form-item {
+      display: flex;
+      gap: 8px;
+
+      .distribution-form-item-content {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        width: 100%;
+      }
+    }
+  }
+}

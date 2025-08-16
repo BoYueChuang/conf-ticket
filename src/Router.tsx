@@ -13,6 +13,7 @@ import { Profile } from './pages/Profile/Profile';
 import { Tickets } from './pages/Tickets/Tickets';
 import { Refund } from './pages/Refund/Refund';
 import { TicketDistribution } from './pages/TicketDistribution/TicketDistribution';
+import { SuccessOrError } from './pages/SuccessOrError/SuccessOrError';
 
 const AppRouter = () => {
   return (
@@ -40,6 +41,8 @@ const AppRouter = () => {
                   <Route path="/tickets" element={<Tickets />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/refund" element={<Refund />} />
+                  <Route path="/refund/success" element={<SuccessOrError />} />
+                  <Route path="/refund/error" element={<SuccessOrError />} />
                   <Route
                     path="/distribution"
                     element={<TicketDistribution />}
