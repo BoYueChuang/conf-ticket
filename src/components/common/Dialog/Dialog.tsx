@@ -5,7 +5,7 @@ interface DialogProps {
   isShowButton?: boolean; // 是否顯示確認和取消按鈕
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title?: string;
   children: React.ReactNode;
   confirmText?: string;
   cancelText?: string;

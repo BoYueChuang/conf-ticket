@@ -3,6 +3,7 @@ import { Select } from '../../components/common/Select/Select';
 import { NotificationMessage } from '../../components/common/Notification/Notification';
 import { apiService } from '../../api/fetchService';
 import { useAuth } from '../../components/common/AuthGuard/AuthGuard';
+import QuantitySelector from '../../components/common/QuantitySelector/QuantitySelector';
 
 interface Option {
   id: string;
@@ -36,7 +37,7 @@ export const Booking: React.FC = () => {
   return (
     <div className="p-6">
       <h1>購票頁面</h1>
-
+      <QuantitySelector />
       {/* 🎯 直接使用組件 + 傳入 options */}
       <Select
         options={branchOptions}

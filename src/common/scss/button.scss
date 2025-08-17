@@ -23,6 +23,13 @@
 .send-btn {
   background: #ffcc32;
   color: #000;
+
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: #e5e7eb !important;
+    color: #9ca3af !important;
+  }
 }
 
 .cancel-btn {
@@ -32,6 +39,6 @@
 
 @media screen and (max-width: 768px) {
   .btn {
-    width: 176px;
+    width: 224px;
   }
 }

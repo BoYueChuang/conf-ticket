@@ -1,3 +1,11 @@
+h1 {
+  font-size: 30px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 28px;
+  }
+}
+
 .distribution-container {
   max-width: 386px;
   width: 100%;
@@ -10,9 +18,9 @@
     display: flex;
     flex-direction: column;
     gap: 28px;
+
     h1 {
       text-align: center;
-      font-size: 30px;
       font-weight: 600;
     }
 
@@ -59,6 +67,7 @@
     flex-direction: column;
     gap: 27px;
     margin-bottom: 60px;
+
     .distribution-form-title {
       color: #000;
       font-size: 18px;
@@ -70,11 +79,69 @@
       display: flex;
       gap: 8px;
 
+      .email-checkbox {
+        margin: 4px;
+      }
+
       .distribution-form-item-content {
         display: flex;
         flex-direction: column;
         gap: 6px;
         width: 100%;
+
+        .error-text {
+          color: #ee1b0a;
+          font-size: 14px;
+          line-height: 20px;
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+
+  .distribution-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 0 auto;
+  }
+}
+
+.ticket-distribution-dialog {
+  .dialog-header {
+    padding: 20px 0 40px 0;
+  }
+
+  .distribution-dialog-content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    .distribution-dialog-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 40px;
+
+      .dialog-icon {
+        margin: 0 auto;
+      }
+    }
+
+    .distribution-dialog-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+
+      .distribution-dialog-info-item {
+        display: flex;
+        gap: 12px;
+
+        .distribution-dialog-info-item-content {
+          color: #EE1B0A;
+          font-weight: 600;
+        }
       }
     }
   }

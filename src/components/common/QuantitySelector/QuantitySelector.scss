@@ -1,0 +1,105 @@
+// QuantitySelector.scss
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background-color: white;
+  overflow: hidden;
+  width: fit-content;
+
+  .quantity-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: #f9fafb;
+    }
+
+    &:active:not(:disabled) {
+      background-color: #f3f4f6;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+
+      &.decrease {
+
+        // 當數量為 0 時，- 號顯示 deep blue/200 (#93c5fd)
+        .icon path {
+          fill: #93c5fd;
+        }
+      }
+    }
+
+    .icon {
+      transition: all 0.2s ease;
+
+      &.disabled {
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .quantity-input {
+    width: 60px;
+    height: 40px;
+    border: none;
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: white;
+    outline: none;
+
+    &:focus {
+      background-color: #f9fafb;
+    }
+
+    // 隱藏數字輸入框的上下箭頭
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
+  }
+}
+
+// 變體樣式
+.quantity-selector.compact {
+  .quantity-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .quantity-input {
+    width: 50px;
+    height: 32px;
+    font-size: 14px;
+  }
+}
+
+// 圓角變體
+.quantity-selector.rounded {
+  border-radius: 20px;
+
+  .quantity-btn:first-child {
+    border-radius: 20px 0 0 20px;
+  }
+
+  .quantity-btn:last-child {
+    border-radius: 0 20px 20px 0;
+  }
+}

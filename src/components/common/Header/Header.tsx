@@ -5,7 +5,7 @@ export interface HeaderProps {
   title?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title = 'CONF TICKET' }) => {
+export const Header: React.FC<HeaderProps> = ({ title: _title = 'CONF TICKET' }) => {
   // local storage 裡是否有 auth_token
   const token = localStorage.getItem('auth_token');
 
