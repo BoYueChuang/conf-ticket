@@ -1,58 +1,262 @@
-import React, { useEffect, useState } from 'react';
-import { Select } from '../../components/common/Select/Select';
-import { NotificationMessage } from '../../components/common/Notification/Notification';
-import { apiService } from '../../api/fetchService';
-import { useAuth } from '../../components/common/AuthGuard/AuthGuard';
-import QuantitySelector from '../../components/common/QuantitySelector/QuantitySelector';
-
-interface Option {
-  id: string;
-  label: string;
-}
-
+import React from 'react';
+import './Booking.scss';
+import { QuantitySelector } from '../../components/common/QuantitySelector/QuantitySelector';
 export const Booking: React.FC = () => {
-  const [selectedBranch, setSelectedBranch] = useState('');
-  const { userInfo } = useAuth();
-  const branchOptions: Option[] = [
-    { id: 'taipei', label: 'The Hope 台北分部' },
-    { id: 'taichung', label: 'The Hope 台中分部' },
-    { id: 'online', label: 'The Hope 線上分部' },
-    { id: 'others', label: '其他教會' },
-  ];
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const data = await apiService.users.getAll();
-        console.log('Tickets data:', data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    console.log(userInfo, 'userInfo');
-
-    loadData();
-  }, []);
-
   return (
-    <div className="p-6">
-      <h1>購票頁面</h1>
-      <QuantitySelector />
-      {/* 🎯 直接使用組件 + 傳入 options */}
-      <Select
-        options={branchOptions}
-        value={selectedBranch}
-        onChange={setSelectedBranch}
-        placeholder="請選擇分部..."
-      />
-
-      <br />
-
-      <input className="form-input" type="text" placeholder="請輸入分部名稱" />
-      <br />
-      <input type="checkbox" />
-      <br />
-      <NotificationMessage status="success" text="註冊成功！" />
+    <div className="booking-container">
+      <h1>選擇票券類型與數量</h1>
+      <div className="booking-content">
+        <div className="booking-content-item">
+          <div className="booking-content-item-left">
+            <img
+              src="/src/assets/images/ticket-sample.png"
+              alt=""
+              className="ticket-pic"
+            />
+            <div className="ticket-info">
+              <div className="ticket-info-title">
+                <p>Regular Pass</p>
+                <p>$2,800</p>
+              </div>
+              <ul className="ticket-info-list">
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>特會全場次 & WORKSHOP & 特會影片（一個月線上觀看權限）</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="booking-content-item-right">
+            <QuantitySelector></QuantitySelector>
+          </div>
+        </div>
+        <div className="booking-content-item">
+          <div className="booking-content-item-left">
+            <img
+              src="/src/assets/images/ticket-sample.png"
+              alt=""
+              className="ticket-pic"
+            />
+            <div className="ticket-info">
+              <div className="ticket-info-title">
+                <p>Special A Pass</p>
+                <p>$3,200</p>
+              </div>
+              <ul className="ticket-info-list">
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>特會全場次 & WORKSHOP & 特會影片（一個月線上觀看權限）</p>
+                </li>
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>5/2 與 Wade Joye 牧師午餐及 Live QA</p>
+                </li>
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>會場深度配有即時翻譯</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="booking-content-item-right">
+            <QuantitySelector></QuantitySelector>
+          </div>
+        </div>
+        <div className="booking-content-item">
+          <div className="booking-content-item-left">
+            <img
+              src="/src/assets/images/ticket-sample.png"
+              alt=""
+              className="ticket-pic"
+            />
+            <div className="ticket-info">
+              <div className="ticket-info-title">
+                <p>Special B Pass</p>
+                <p>$3,400</p>
+              </div>
+              <ul className="ticket-info-list">
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>特會全場次 & WORKSHOP & 特會影片（一個月線上觀看權限）</p>
+                </li>
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>5/3 與 Wade Joye 牧師午餐及 Live QA</p>
+                </li>
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>會場深度配有即時翻譯</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="booking-content-item-right">
+            <QuantitySelector></QuantitySelector>
+          </div>
+        </div>
+        <div className="booking-content-item">
+          <div className="booking-content-item-left">
+            <img
+              src="/src/assets/images/ticket-sample.png"
+              alt=""
+              className="ticket-pic"
+            />
+            <div className="ticket-info">
+              <div className="ticket-info-title">
+                <p>Special B Pass</p>
+                <p>$3,400</p>
+              </div>
+              <ul className="ticket-info-list">
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>特會全場次 & WORKSHOP & 特會影片（一個月線上觀看權限）</p>
+                </li>
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>5/3 與 Wade Joye 牧師午餐及 Live QA</p>
+                </li>
+                <li className="ticket-info-content">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <circle
+                      cx="10.0003"
+                      cy="9.99935"
+                      r="3.33333"
+                      fill="#778793"
+                    />
+                  </svg>
+                  <p>會場深度配有即時翻譯</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="booking-content-item-right">
+            <QuantitySelector></QuantitySelector>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

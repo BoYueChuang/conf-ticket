@@ -1,42 +1,32 @@
-// QuantitySelector.scss
 .quantity-selector {
   display: flex;
   align-items: center;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
+  border: 1px solid #d2d4d5;
   background-color: white;
   overflow: hidden;
   width: fit-content;
+  padding: 6px 10px;
 
   .quantity-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 24px;
     border: none;
     background-color: transparent;
     cursor: pointer;
     transition: background-color 0.2s ease;
 
-    &:hover:not(:disabled) {
-      background-color: #f9fafb;
-    }
-
-    &:active:not(:disabled) {
-      background-color: #f3f4f6;
-    }
-
     &:disabled {
       cursor: not-allowed;
+    }
 
-      &.decrease {
+    &.decrease {
+      padding-right: 6px;
+    }
 
-        // 當數量為 0 時，- 號顯示 deep blue/200 (#93c5fd)
-        .icon path {
-          fill: #93c5fd;
-        }
-      }
+    &.increase {
+      padding-left: 6px;
     }
 
     .icon {
@@ -49,11 +39,11 @@
   }
 
   .quantity-input {
-    width: 60px;
-    height: 40px;
+    width: 48px;
+    height: 28px;
     border: none;
-    border-left: 1px solid #e5e7eb;
-    border-right: 1px solid #e5e7eb;
+    border-left: 1px solid #d2d4d5;
+    border-right: 1px solid #d2d4d5;
     text-align: center;
     font-size: 16px;
     font-weight: 500;
@@ -71,7 +61,7 @@
       margin: 0;
     }
 
-    &[type=number] {
+    &[type='number'] {
       -moz-appearance: textfield;
     }
   }
