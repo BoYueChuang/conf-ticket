@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './QuantitySelector.scss';
 
 interface QuantitySelectorProps {
@@ -19,6 +19,11 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   onChange,
 }) => {
   const [quantity, setQuantity] = useState(initialValue);
+
+  // 當 initialValue 變化時，更新內部狀態
+  useEffect(() => {
+    setQuantity(initialValue);
+  }, [initialValue]);
 
   const handleDecrease = () => {
     if (quantity > min) {

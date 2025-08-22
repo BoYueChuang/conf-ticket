@@ -14,6 +14,7 @@ import { Tickets } from './pages/Tickets/Tickets';
 import { Refund } from './pages/Refund/Refund';
 import { TicketDistribution } from './pages/TicketDistribution/TicketDistribution';
 import { SuccessOrError } from './pages/SuccessOrError/SuccessOrError';
+import { Payment } from './pages/Payment/Payment';
 
 const AppRouter = () => {
   return (
@@ -39,6 +40,7 @@ const AppRouter = () => {
                   <Route path="/" element={<Main />} />
                   <Route path="/booking" element={<Booking />} />
                   <Route path="/tickets" element={<Tickets />} />
+                  <Route path="/payment" element={<Payment />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/refund" element={<Refund />} />
                   <Route path="/refund/success" element={<SuccessOrError />} />

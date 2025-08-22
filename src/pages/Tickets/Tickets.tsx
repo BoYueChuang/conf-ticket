@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TicketsCard } from '../TicketsCard/TicketsCard';
+import { TicketsCard } from '../../components/common/TicketsCard/TicketsCard';
 import './Tickets.scss';
 
 export const Tickets: React.FC = () => {
@@ -34,7 +34,6 @@ export const Tickets: React.FC = () => {
     //     "專屬休息區使用權"
     //   ]
     // },
-
     // {
     //   id: 3,
     //   title: "GENERAL PASS",
@@ -57,7 +56,7 @@ export const Tickets: React.FC = () => {
   const ticketStatuses = [
     { key: 'purchased', title: '已購買', count: 0 },
     { key: 'collected', title: '已取票', count: 0 },
-    { key: 'refunded', title: '退票紀錄', count: 0 }
+    { key: 'refunded', title: '退票紀錄', count: 0 },
   ];
 
   // 點擊處理函數
@@ -79,33 +78,37 @@ export const Tickets: React.FC = () => {
   };
 
   const getAlertContent = () => {
-
     switch (activeStatus) {
       case 'purchased':
         return (
           <>
-            購買票券後，請先進行分票，系統將寄送取票通知至您填寫的信箱。<br />
-            於信件點擊開通票券後，可至「票券系統」→「我的票券」→「已取票」查看，票券也將自動歸戶至您的 App 帳戶。
+            購買票券後，請先進行分票，系統將寄送取票通知至您填寫的信箱。
+            <br />
+            於信件點擊開通票券後，可至「票券系統」→「我的票券」→「已取票」查看，票券也將自動歸戶至您的
+            App 帳戶。
           </>
         );
       case 'collected':
         return (
           <>
-            已取票之票券將自動與您的 App 帳戶同步，作為活動報到與入場憑證。<br />
+            已取票之票券將自動與您的 App 帳戶同步，作為活動報到與入場憑證。
+            <br />
             每人僅限持有一張票券。
           </>
-        )
+        );
       case 'refunded':
         return (
           <>
-            完成退票手續後，系統將於 5 個工作天內退款至您原付款的信用卡。<br />
+            完成退票手續後，系統將於 5 個工作天內退款至您原付款的信用卡。
+            <br />
             如需開立發票，請來信至 conf@thehope.co
           </>
         );
       default:
         return (
           <>
-            已取票之票券將自動與您的 App 帳戶同步，作為活動報到與入場憑證。<br />
+            已取票之票券將自動與您的 App 帳戶同步，作為活動報到與入場憑證。
+            <br />
             每人僅限持有一張票券。
           </>
         );
@@ -118,7 +121,7 @@ export const Tickets: React.FC = () => {
       <div className="tickets-header">
         <h1>我的票券</h1>
         <div className="ticket-header-status">
-          {ticketStatuses.map((status) => (
+          {ticketStatuses.map(status => (
             <div
               key={status.key}
               className={`ticket-header-status-item ${activeStatus === status.key ? 'active' : ''}`}
@@ -137,33 +140,33 @@ export const Tickets: React.FC = () => {
           <img src="/src/assets/images/ticket-alert-dot.svg" alt="" />
           <p>貼心提醒</p>
         </div>
-        <div className="ticket-alert-content">
-          {getAlertContent()}
-        </div>
+        <div className="ticket-alert-content">{getAlertContent()}</div>
       </div>
       <div className="tickets-content-container">
         {tickets.length === 0 ? (
           <>
-            <img src="/src/assets/images/ticket-sample.png" alt="" className='ticket-pic' />
+            <img
+              src="/src/assets/images/ticket-sample.png"
+              alt=""
+              className="ticket-pic"
+            />
             <p>{noTicketText()}</p>
           </>
         ) : (
           <>
-            {
-              tickets.map((ticket: any) => (
-                <TicketsCard
-                  key={ticket.id}
-                  title={ticket.title}
-                  startDate={ticket.startDate}
-                  endDate={ticket.endDate}
-                  startTime={ticket.startTime}
-                  endTime={ticket.endTime}
-                  quantity={ticket.quantity}
-                  orderNumber={ticket.orderNumber}
-                  details={ticket.details}
-                />
-              ))
-            }
+            {tickets.map((ticket: any) => (
+              <TicketsCard
+                key={ticket.id}
+                title={ticket.title}
+                startDate={ticket.startDate}
+                endDate={ticket.endDate}
+                startTime={ticket.startTime}
+                endTime={ticket.endTime}
+                quantity={ticket.quantity}
+                orderNumber={ticket.orderNumber}
+                details={ticket.details}
+              />
+            ))}
           </>
         )}
       </div>
