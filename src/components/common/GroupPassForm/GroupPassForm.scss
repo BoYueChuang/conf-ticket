@@ -1,11 +1,15 @@
 .group-pass-form {
   .group-pass-form-title {
-    color: #3c5464;
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
     line-height: 28px;
     margin-bottom: 16px;
+    color: #3c5464;
+  }
+
+  .group-pass-form-record-title {
+    margin-top: 36px;
   }
 
   .group-pass-form-details {
@@ -63,6 +67,10 @@
       line-height: 24px;
     }
 
+    .record-title {
+      color: #3C5464;
+    }
+
     &::-webkit-details-marker {
       display: none;
     }
@@ -84,11 +92,23 @@
 
         .form-label {
           margin-bottom: 6px;
-          padding-left: 6px;
 
           label {
             font-size: 14px;
           }
+        }
+
+        .form-record-item {
+          font-size: 18px;
+        }
+
+        .p-l-6 {
+          padding-left: 6px;
+        }
+
+        .form-record-label {
+          color: #A5A9AB;
+          padding-left: 0px;
         }
 
         .form-input {
@@ -128,8 +148,13 @@
 
 @media screen and (max-width: 768px) {
   .group-pass-form {
+    .group-pass-form-record-title {
+      margin-top: 24px;
+    }
+
     .group-pass-form-content {
       flex-direction: column;
+
       .group-pass-form-input {
         .form-item {
           .form-label {

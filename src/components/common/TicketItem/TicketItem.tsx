@@ -24,7 +24,11 @@ export const TicketItem: React.FC<TicketItemProps> = ({
     <div>
       <div className="booking-content-item">
         <div className="booking-content-item-left">
-          <img src={ticket.image} alt={ticket.name} className="ticket-pic" />
+          <img
+            src={ticket.image}
+            alt={ticket.name}
+            className={mode === 'edit' ? 'edit-ticket-pic' : 'record-ticket-pic'}
+          />
         </div>
         <div className="booking-content-item-right">
           <div className="ticket-info">

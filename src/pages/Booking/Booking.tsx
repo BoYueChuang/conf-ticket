@@ -18,9 +18,9 @@ interface GroupPassFormData {
 export const Booking: React.FC = () => {
   const navigate = useNavigate();
 
-  // 初始化時檢查是否有儲存的資料
+  // 初始化時檢查是否有儲存的資料（從 sessionStorage）
   const initializeFromStorage = () => {
-    const storedData = localStorage.getItem('ticketOrderData');
+    const storedData = sessionStorage.getItem('ticketOrderData');
     if (storedData) {
       try {
         const data = JSON.parse(storedData);
@@ -59,6 +59,14 @@ export const Booking: React.FC = () => {
   const [groupPassFormData, setGroupPassFormData] = useState<
     GroupPassFormData[]
   >(initialData.formData);
+
+  const [isGroupFormValid, setIsGroupFormValid] = useState(false);
+
+  // 監控群組表單有效性
+  React.useEffect(() => {
+    console.log('群組表單是否有效:', isGroupFormValid);
+  }, [isGroupFormValid]);
+
 
   const handleQuantityChange = (ticketId: string, quantity: number) => {
     setTicketQuantities(prev => ({
@@ -121,17 +129,21 @@ export const Booking: React.FC = () => {
 
   const handleNextStep = () => {
     const ticketInfo = getSelectedTickets();
-
-    // 將票券資訊存入 localStorage
-    localStorage.setItem('ticketOrderData', JSON.stringify(ticketInfo));
+    // 將票券資訊存入 sessionStorage
+    sessionStorage.setItem('ticketOrderData', JSON.stringify(ticketInfo));
 
     // 導航到付款頁面
     navigate('/payment');
   };
 
   const groupPassQuantity = ticketQuantities['group'] || 0;
-  const isNextButtonDisabled = getTotalQuantity() === 0;
 
+  // 下一步按鈕禁用條件：
+  // 1. 沒有選擇任何票券
+  // 2. 有選擇群組票券但群組表單無效
+  const isNextButtonDisabled =
+    getTotalQuantity() === 0 ||
+    (groupPassQuantity > 0 && !isGroupFormValid);
   return (
     <div className="booking-container">
       <h1>選擇票券類型與數量</h1>
@@ -151,6 +163,7 @@ export const Booking: React.FC = () => {
                   quantity={groupPassQuantity}
                   formData={groupPassFormData}
                   onFormDataChange={handleGroupPassFormChange}
+                  onValidationChange={setIsGroupFormValid}
                 />
               </div>
             );

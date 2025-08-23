@@ -3,9 +3,14 @@
   gap: 16px;
 
   .booking-content-item-left {
-    .ticket-pic {
+    .edit-ticket-pic {
       width: 180px;
       height: 130px;
+    }
+
+    .record-ticket-pic {
+      width: 126px;
+      height: 91px;
     }
   }
 
@@ -48,12 +53,17 @@
           line-height: 20px;
           display: flex;
           gap: 2px;
+
+          svg {
+            flex-shrink: 0;
+          }
         }
       }
     }
 
     .ticket-quantity {
       align-self: center;
+
       p {
         font-weight: 600;
       }
@@ -70,9 +80,14 @@
     gap: 12px;
 
     .booking-content-item-left {
-      .ticket-pic {
+      .edit-ticket-pic {
         width: 108px;
         height: 78px;
+      }
+
+      .record-ticket-pic {
+        width: 90px;
+        height: 65px;
       }
     }
 
@@ -100,6 +115,7 @@
       }
     }
   }
+
   .ticket-info-list-mobile {
     display: flex;
     flex-direction: column;
@@ -112,6 +128,10 @@
       line-height: 20px;
       display: flex;
       gap: 2px;
+
+      svg {
+        flex-shrink: 0;
+      }
     }
   }
 }

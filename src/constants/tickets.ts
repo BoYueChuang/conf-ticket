@@ -58,7 +58,7 @@ export const TICKET_TYPES: TicketInfo[] = [
     name: 'Group Pass',
     price: 16800,
     image: '/src/assets/images/ticket-sample.png',
-    remark: '※限牧者、傳道人、事工負責人報名參加',
+    remark: '※一組為6張REGULAR PASS',
     isGroupPass: true,
     isSpecialAccess: true,
     features: [
