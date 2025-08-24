@@ -45,7 +45,9 @@ export const Payment: React.FC = () => {
     ccv: ''
   });
 
-  const { register, watch, formState: { errors } } = useForm();
+  const { register, watch, formState: { errors }, trigger } = useForm({
+    mode: 'onChange' // 當輸入改變時觸發驗證
+  });
 
   useEffect(() => {
     const storedData = sessionStorage.getItem('ticketOrderData');
@@ -192,11 +194,11 @@ export const Payment: React.FC = () => {
 
       {/* 按鈕區 */}
       <div className="payment-buttons">
+        <button className="btn send-btn" onClick={handlePayment}>
+          前往付款
+        </button>
         <button className="btn cancel-btn" onClick={handleBackToBooking}>
           返回修改
-        </button>
-        <button className="btn pay-btn" onClick={handlePayment}>
-          確認付款
         </button>
       </div>
     </div>
