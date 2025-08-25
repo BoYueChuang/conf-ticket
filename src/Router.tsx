@@ -13,7 +13,6 @@ import { Profile } from './pages/Profile/Profile';
 import { Tickets } from './pages/Tickets/Tickets';
 import { Refund } from './pages/Refund/Refund';
 import { TicketDistribution } from './pages/TicketDistribution/TicketDistribution';
-import { SuccessOrError } from './pages/SuccessOrError/SuccessOrError';
 import { Payment } from './pages/Payment/Payment';
 
 const AppRouter = () => {
@@ -43,8 +42,6 @@ const AppRouter = () => {
                   <Route path="/payment" element={<Payment />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/refund" element={<Refund />} />
-                  <Route path="/refund/success" element={<SuccessOrError />} />
-                  <Route path="/refund/error" element={<SuccessOrError />} />
                   <Route
                     path="/distribution"
                     element={<TicketDistribution />}

@@ -35,8 +35,24 @@ const Dialog: React.FC<DialogProps> = ({
 
   // 重置狀態當對話框開啟時
   React.useEffect(() => {
-    if (isOpen) {
-      setCanConfirm(!requireScrollToBottom);
+    if (isOpen && requireScrollToBottom) {
+      setCanConfirm(false);
+
+      // 檢查是否需要滾動
+      const checkScrollNeeded = () => {
+        const element = contentRef.current;
+        if (element) {
+          const needsScroll = element.scrollHeight > element.clientHeight;
+          // 如果內容不需要滾動，直接允許確認
+          setCanConfirm(!needsScroll);
+        }
+      };
+
+      // 延遲檢查確保DOM已渲染
+      const timer = setTimeout(checkScrollNeeded, 100);
+      return () => clearTimeout(timer);
+    } else if (isOpen) {
+      setCanConfirm(true);
     }
   }, [isOpen, requireScrollToBottom]);
 

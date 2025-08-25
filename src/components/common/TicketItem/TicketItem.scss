@@ -25,9 +25,16 @@
 
       .ticket-info-title {
         span {
-          color: var(--black, #000);
           font-weight: 600;
           line-height: 24px;
+        }
+
+        .edit-title {
+          color: #000;
+        }
+
+        .record-title {
+          color: #24323c;
         }
 
         span:first-child {

@@ -34,6 +34,28 @@
       line-height: 24px;
     }
   }
+  .success-error-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .success-error-list {
+    padding-left: 0;
+    li {
+      position: relative;
+      padding-left: 20px; /* 給實心圓留空間 */
+    }
+
+    li::before {
+      content: '●';
+      color: black;
+      font-size: 8px;
+      position: absolute;
+      left: 0;
+      top: 7px;
+    }
+  }
 }
 @media screen and (max-width: 768px) {
   .success-error-container {

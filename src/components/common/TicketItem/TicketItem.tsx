@@ -27,14 +27,20 @@ export const TicketItem: React.FC<TicketItemProps> = ({
           <img
             src={ticket.image}
             alt={ticket.name}
-            className={mode === 'edit' ? 'edit-ticket-pic' : 'record-ticket-pic'}
+            className={
+              mode === 'edit' ? 'edit-ticket-pic' : 'record-ticket-pic'
+            }
           />
         </div>
         <div className="booking-content-item-right">
           <div className="ticket-info">
             <div className="ticket-info-title">
-              <span>{ticket.name}</span>
-              <span>${ticket.price.toLocaleString()}</span>
+              <span className={mode === 'edit' ? 'edit-title' : 'record-title'}>
+                {ticket.name}
+              </span>
+              <span className={mode === 'edit' ? 'edit-title' : 'record-title'}>
+                ${ticket.price.toLocaleString()}
+              </span>
               {ticket.remark && (
                 <p className="ticket-info-remark">{ticket.remark}</p>
               )}
