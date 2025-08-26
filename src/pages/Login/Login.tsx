@@ -4,8 +4,9 @@ import './Login.scss';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const [isEmailSubmitted, setIsEmailSubmitted] = useState(false); // 🔥 重新命名，更清楚
+  const [requiredError, setRequiredError] = useState('');
+  const [formatError, setFormatError] = useState('');
+  const [isEmailSubmitted, setIsEmailSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(300); // 5分鐘
 
@@ -24,19 +25,22 @@ export const Login: React.FC = () => {
     return () => clearInterval(interval);
   }, [timerSeconds]);
 
-  // 郵件格式驗證
-  const validateEmail = (emailValue: string) => {
-    // 空值檢查
+  // 必填驗證
+  const validateRequired = (emailValue: string) => {
     if (!emailValue.trim()) {
-      return '信箱為必填欄位';
+      return '必填';
     }
+    return '';
+  };
 
-    // 郵件格式驗證
+  // 郵件格式驗證
+  const validateEmailFormat = (emailValue: string) => {
+    if (!emailValue.trim()) return ''; // 空值時不檢查格式
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailValue)) {
-      return '請輸入有效的信箱格式';
+      return '輸入格式錯誤';
     }
-
     return '';
   };
 
@@ -46,16 +50,20 @@ export const Login: React.FC = () => {
     setEmail(value);
 
     // 即時驗證
-    if (error) {
-      const errorMessage = validateEmail(value);
-      setError(errorMessage);
+    if (requiredError || formatError) {
+      const requiredMsg = validateRequired(value);
+      const formatMsg = validateEmailFormat(value);
+      setRequiredError(requiredMsg);
+      setFormatError(formatMsg);
     }
   };
 
   // Email blur 驗證
   const handleEmailBlur = () => {
-    const errorMessage = validateEmail(email);
-    setError(errorMessage);
+    const requiredMsg = validateRequired(email);
+    const formatMsg = validateEmailFormat(email);
+    setRequiredError(requiredMsg);
+    setFormatError(formatMsg);
   };
 
   // 第一步：提交 Email，發送登入連結至信箱
@@ -64,11 +72,15 @@ export const Login: React.FC = () => {
 
     try {
       setIsLoading(true);
-      setError('');
+      setRequiredError('');
+      setFormatError('');
 
-      const errorMessage = validateEmail(email);
-      if (errorMessage) {
-        setError(errorMessage);
+      const requiredMsg = validateRequired(email);
+      const formatMsg = validateEmailFormat(email);
+
+      if (requiredMsg || formatMsg) {
+        setRequiredError(requiredMsg);
+        setFormatError(formatMsg);
         return;
       }
 
@@ -82,7 +94,7 @@ export const Login: React.FC = () => {
       setIsEmailSubmitted(true);
     } catch (error: any) {
       console.error('發送 OTP 失敗:', error.message);
-      setError(error.message || '發送失敗，請稍後再試');
+      setFormatError(error.message || '發送失敗，請稍後再試');
     } finally {
       setIsLoading(false);
     }
@@ -127,10 +139,13 @@ export const Login: React.FC = () => {
             <p className="form-description">
               請輸入您的電子郵件地址，並按下「發送電子郵件」，您將收到來自conf@thehope.co寄送的一次性密碼。
             </p>
-            <label htmlFor="email">電子郵件</label>
+            <div className="form-label">
+              <label htmlFor="email">電子郵件</label>
+              {requiredError && <p className="invaild-text">{requiredError}</p>}
+            </div>
             <input
               id="email"
-              className={`form-input ${error ? 'invalid' : 'valid'}`}
+              className={`form-input ${requiredError || formatError ? 'invalid' : 'valid'}`}
               type="email"
               placeholder="請輸入電子郵件"
               value={email}
@@ -141,7 +156,7 @@ export const Login: React.FC = () => {
               aria-required
               required
             />
-            {error && <p className="invaild-text">{error}</p>}
+            {formatError && <p className="invaild-text">{formatError}</p>}
           </div>
 
           <div className="btn-container">
