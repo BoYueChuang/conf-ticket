@@ -1,15 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Dialog from '../../components/common/Dialog/Dialog';
 import { NotificationMessage } from '../../components/common/Notification/Notification';
 import { Select } from '../../components/common/Select/Select';
 import './Profile.scss';
-import Dialog from '../../components/common/Dialog/Dialog';
-import React from 'react';
 
 export const Profile: React.FC = () => {
-  const [selectedGender, setSelectedGender] = useState('');
-  const [selectedChurch, setSelectedChurch] = useState('');
-  const [selectedChurchIdentity, setSelectedChurchIdentity] = useState('');
   const [showNotification, setShowNotification] = useState('');
   const navigate = useNavigate();
   const [isUserTermsDialogOpen, setUserTermsDialogOpen] = React.useState(false);
@@ -19,10 +15,32 @@ export const Profile: React.FC = () => {
     React.useState(true);
   const [isPrivacyPolicyCheckBoxDisabled, setPrivacyPolicyCheckBoxDisabled] =
     React.useState(true);
+  const [isUserTermsChecked, setUserTermsChecked] = React.useState(false);
+  const [isPrivacyPolicyChecked, setPrivacyPolicyChecked] =
+    React.useState(false);
+
+  const [fields, setFields] = useState({
+    fullName: '',
+    phone: '',
+    churchName: '',
+    gender: '',
+    church: '',
+    churchIdentity: '',
+  });
+
+  const [errors, setErrors] = useState({
+    fullName: '',
+    phone: '',
+    churchName: '',
+    gender: '',
+    church: '',
+    churchIdentity: '',
+  });
 
   const handleUserTermsConfirm = () => {
     setUserTermsDialogOpen(false);
     setUserTermsCheckBoxDisabled(false);
+    setUserTermsChecked(true);
   };
 
   const handleUserTermsCancel = () => {
@@ -32,6 +50,7 @@ export const Profile: React.FC = () => {
   const handlePrivacyPolicyConfirm = () => {
     setPrivacyPolicyCheckBoxDisabled(false);
     setPrivacyPolicyDialogOpen(false);
+    setPrivacyPolicyChecked(true);
   };
 
   const handlePrivacyPolicyCancel = () => {
@@ -52,10 +71,73 @@ export const Profile: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 儲存個人檔案成功後導向 main
-    sessionStorage.setItem('fromProfile', 'true');
-    navigate('/main', { replace: true });
+    // 驗證所有必填欄位
+    const newErrors = {
+      fullName: validateRequired(fields.fullName),
+      phone: validateRequired(fields.phone),
+      churchName:
+        fields.church === 'other' ? validateRequired(fields.churchName) : '',
+      gender: validateRequired(fields.gender),
+      church: validateRequired(fields.church),
+      churchIdentity: validateRequired(fields.churchIdentity),
+    };
+
+    setErrors(newErrors);
+
+    // 檢查是否有錯誤
+    const hasErrors = Object.values(newErrors).some(error => error !== '');
+
+    // 檢查checkbox是否已勾選
+    const checkboxError = !isUserTermsChecked || !isPrivacyPolicyChecked;
+
+    if (!hasErrors && !checkboxError) {
+      // 儲存個人檔案成功後導向 main
+      sessionStorage.setItem('fromProfile', 'true');
+      navigate('/main', { replace: true });
+    } else if (checkboxError) {
+      alert('請先閱讀並同意使用者條款和隱私權保護政策');
+    }
   };
+
+  // 必填驗證
+  const validateRequired = (value: string) => {
+    if (!value.trim()) {
+      return '必填';
+    }
+    return '';
+  };
+
+  // 通用輸入變更處理
+  const handleFieldChange =
+    (fieldName: keyof typeof fields) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setFields(prev => ({ ...prev, [fieldName]: value }));
+
+      // 即時驗證
+      if (errors[fieldName]) {
+        const requiredMsg = validateRequired(value);
+        setErrors(prev => ({ ...prev, [fieldName]: requiredMsg }));
+      }
+    };
+
+  // 通用 blur 驗證
+  const handleFieldBlur = (fieldName: keyof typeof fields) => () => {
+    const requiredMsg = validateRequired(fields[fieldName]);
+    setErrors(prev => ({ ...prev, [fieldName]: requiredMsg }));
+  };
+
+  // 通用 Select 變更處理
+  const handleSelectChange =
+    (fieldName: keyof typeof fields) => (value: string) => {
+      setFields(prev => ({ ...prev, [fieldName]: value }));
+
+      // 即時驗證
+      if (errors[fieldName]) {
+        const requiredMsg = validateRequired(value);
+        setErrors(prev => ({ ...prev, [fieldName]: requiredMsg }));
+      }
+    };
 
   // 組件邏輯
   return (
@@ -68,7 +150,10 @@ export const Profile: React.FC = () => {
         />
       )}
 
-      <form onSubmit={handleSubmit} className="profile-container">
+      <form
+        onSubmit={handleSubmit}
+        className="form-container profile-container"
+      >
         <div className="profile-header">
           <h1>建立個人檔案</h1>
           <p>
@@ -78,13 +163,29 @@ export const Profile: React.FC = () => {
         <div className="profile-form">
           <div className="form-item">
             <div className="form-label">
-              <label htmlFor="name">姓名</label>
-              <p>必填</p>
+              <label htmlFor="name">電子郵件</label>
             </div>
             <input
               id="name"
               className={`form-input`}
               type="text"
+              value={'dev@thehope.com'}
+              aria-required
+              disabled
+            />
+          </div>
+          <div className="form-item">
+            <div className="form-label">
+              <label htmlFor="name">姓名</label>
+              <p className="invaild-text">必填</p>
+            </div>
+            <input
+              id="name"
+              className={`form-input`}
+              type="text"
+              onChange={handleFieldChange('fullName')}
+              onBlur={handleFieldBlur('fullName')}
+              value={fields.fullName}
               placeholder="請輸入姓名"
               aria-label="請輸入姓名"
               aria-required
@@ -93,13 +194,16 @@ export const Profile: React.FC = () => {
           </div>
           <div className="form-item">
             <div className="form-label">
-              <label htmlFor="name">電話</label>
-              <p>必填</p>
+              <label htmlFor="phone">電話</label>
+              <p className="invaild-text">必填</p>
             </div>
             <input
               id="phone"
               className={`form-input`}
-              type="number"
+              type="text"
+              onChange={handleFieldChange('phone')}
+              onBlur={handleFieldBlur('phone')}
+              value={fields.phone}
               placeholder="請輸入電話"
               aria-label="請輸入電話"
               aria-required
@@ -108,23 +212,23 @@ export const Profile: React.FC = () => {
           </div>
           <div className="form-item">
             <div className="form-label">
-              <label htmlFor="name">性別</label>
-              <p>必填</p>
+              <label htmlFor="gender">性別</label>
+              <p className="invaild-text">必填</p>
             </div>
             <Select
               options={[
                 { id: 'male', label: '男' },
                 { id: 'female', label: '女' },
               ]}
-              value={selectedGender}
-              onChange={setSelectedGender}
+              value={fields.gender}
+              onChange={handleSelectChange('gender')}
               placeholder="請選擇"
             />
           </div>
           <div className="form-item">
             <div className="form-label">
-              <label htmlFor="name">所屬教會</label>
-              <p>必填</p>
+              <label htmlFor="church">所屬教會</label>
+              <p className="invaild-text">必填</p>
             </div>
             <Select
               options={[
@@ -133,30 +237,35 @@ export const Profile: React.FC = () => {
                 { id: 'online', label: 'The Hope 線上分部' },
                 { id: 'other', label: '其他' },
               ]}
-              value={selectedChurch}
-              onChange={setSelectedChurch}
+              value={fields.church}
+              onChange={handleSelectChange('church')}
               placeholder="請選擇"
             />
           </div>
-          <div className="form-item">
-            <div className="form-label">
-              <label htmlFor="name">所屬教會姓名</label>
-              <p>必填</p>
+          {fields.church === 'other' && (
+            <div className="form-item">
+              <div className="form-label">
+                <label htmlFor="church-name">所屬教會姓名</label>
+                <p className="invaild-text">必填</p>
+              </div>
+              <input
+                id="church-name"
+                className={`form-input`}
+                type="text"
+                onChange={handleFieldChange('churchName')}
+                onBlur={handleFieldBlur('churchName')}
+                value={fields.churchName}
+                placeholder="請輸入教會名稱"
+                aria-label="請輸入教會名稱"
+                aria-required
+                required={fields.church === 'other'}
+              />
             </div>
-            <input
-              id="church-name"
-              className={`form-input`}
-              type="text"
-              placeholder="請選擇"
-              aria-label="請選擇"
-              aria-required
-              required
-            />
-          </div>
+          )}
           <div className="form-item">
             <div className="form-label">
-              <label htmlFor="name">所屬教會身份</label>
-              <p>必填</p>
+              <label htmlFor="church-identity">所屬教會身份</label>
+              <p className="invaild-text">必填</p>
             </div>
             <Select
               options={[
@@ -167,8 +276,8 @@ export const Profile: React.FC = () => {
                 { id: 'student', label: '神學生' },
                 { id: 'congregation ', label: '會眾' },
               ]}
-              value={selectedChurchIdentity}
-              onChange={setSelectedChurchIdentity}
+              value={fields.churchIdentity}
+              onChange={handleSelectChange('churchIdentity')}
               placeholder="請選擇"
             />
           </div>
@@ -180,6 +289,8 @@ export const Profile: React.FC = () => {
                 type="checkbox"
                 id="user-terms"
                 disabled={isUserTermsCheckBoxDisabled}
+                checked={isUserTermsChecked}
+                onChange={e => setUserTermsChecked(e.target.checked)}
               />
               <label htmlFor="user-terms">我已閱讀並同意</label>
               <a
@@ -194,6 +305,8 @@ export const Profile: React.FC = () => {
                 type="checkbox"
                 id="privacy-policy"
                 disabled={isPrivacyPolicyCheckBoxDisabled}
+                checked={isPrivacyPolicyChecked}
+                onChange={e => setPrivacyPolicyChecked(e.target.checked)}
               />
               <label htmlFor="privacy-policy">我已閱讀並同意</label>
               <a
