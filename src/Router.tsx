@@ -14,6 +14,7 @@ import { Tickets } from './pages/Tickets/Tickets';
 import { Refund } from './pages/Refund/Refund';
 import { TicketDistribution } from './pages/TicketDistribution/TicketDistribution';
 import { Payment } from './pages/Payment/Payment';
+import { ROUTES } from './constants/routes';
 
 const AppRouter = () => {
   return (
@@ -21,7 +22,7 @@ const AppRouter = () => {
       <Routes>
         {/* 不需要認證的路由 */}
         <Route
-          path="/login"
+          path={ROUTES.LOGIN}
           element={
             <Layout>
               <Login />
@@ -36,18 +37,21 @@ const AppRouter = () => {
             <AuthGuard>
               <Layout>
                 <Routes>
-                  <Route path="/" element={<Main />} />
-                  <Route path="/booking" element={<Booking />} />
-                  <Route path="/tickets" element={<Tickets />} />
-                  <Route path="/payment" element={<Payment />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/refund" element={<Refund />} />
+                  <Route path={ROUTES.HOME} element={<Main />} />
+                  <Route path={ROUTES.BOOKING} element={<Booking />} />
+                  <Route path={ROUTES.TICKETS} element={<Tickets />} />
+                  <Route path={ROUTES.PAYMENT} element={<Payment />} />
+                  <Route path={ROUTES.PROFILE} element={<Profile />} />
+                  <Route path={ROUTES.REFUND} element={<Refund />} />
                   <Route
-                    path="/distribution"
+                    path={ROUTES.TICKET_DISTRIBUTION}
                     element={<TicketDistribution />}
                   />
                   {/* 捕獲所有未匹配的路由，重定向到首頁 */}
-                  <Route path="*" element={<Navigate to="/" replace />} />
+                  <Route
+                    path="*"
+                    element={<Navigate to={ROUTES.HOME} replace />}
+                  />
                 </Routes>
               </Layout>
             </AuthGuard>

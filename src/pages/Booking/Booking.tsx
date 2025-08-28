@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Booking.scss';
-import { TicketItem } from '../../components/common/TicketItem/TicketItem';
 import { GroupPassForm } from '../../components/common/GroupPassForm/GroupPassForm';
+import { TicketItem } from '../../components/common/TicketItem/TicketItem';
+import { ROUTES } from '../../constants/routes';
 import { TICKET_TYPES } from '../../constants/tickets';
+import './Booking.scss';
 interface TicketQuantities {
   [key: string]: number;
 }
@@ -66,7 +67,6 @@ export const Booking: React.FC = () => {
   React.useEffect(() => {
     console.log('群組表單是否有效:', isGroupFormValid);
   }, [isGroupFormValid]);
-
 
   const handleQuantityChange = (ticketId: string, quantity: number) => {
     setTicketQuantities(prev => ({
@@ -133,7 +133,7 @@ export const Booking: React.FC = () => {
     sessionStorage.setItem('ticketOrderData', JSON.stringify(ticketInfo));
 
     // 導航到付款頁面
-    navigate('/payment');
+    navigate(ROUTES.PAYMENT);
   };
 
   const groupPassQuantity = ticketQuantities['group'] || 0;
@@ -142,10 +142,9 @@ export const Booking: React.FC = () => {
   // 1. 沒有選擇任何票券
   // 2. 有選擇群組票券但群組表單無效
   const isNextButtonDisabled =
-    getTotalQuantity() === 0 ||
-    (groupPassQuantity > 0 && !isGroupFormValid);
+    getTotalQuantity() === 0 || (groupPassQuantity > 0 && !isGroupFormValid);
   return (
-    <div className="booking-container">
+    <div className="form-container booking-container">
       <h1>選擇票券類型與數量</h1>
       <div className="booking-content">
         {TICKET_TYPES.map(ticket => {

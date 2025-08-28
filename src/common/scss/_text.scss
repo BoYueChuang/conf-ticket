@@ -6,6 +6,20 @@ h1 {
   line-height: 44px;
 }
 
+@for $i from 1 through 9 {
+  $weight: $i * 100;
+
+  .font-weight#{$weight} {
+    font-weight: #{$weight};
+  }
+}
+
+@for $i from 1 through 30 {
+  .font-size#{$i} {
+    font-size: #{$i}px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   h1 {
     font-size: 28px;

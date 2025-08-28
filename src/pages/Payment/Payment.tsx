@@ -1,23 +1,24 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TicketItem } from '../../components/common/TicketItem/TicketItem';
-import { GroupPassForm } from '../../components/common/GroupPassForm/GroupPassForm';
-import { PaymentSelect } from '../../components/common/PaymentSelect/PaymentSelect';
+import { useNavigate } from 'react-router-dom';
 import CreditCard from '../../components/common/CreditCard/CreditCard';
+import { GroupPassForm } from '../../components/common/GroupPassForm/GroupPassForm';
 import PayButton from '../../components/common/PayButton/PayButton';
+import { PaymentSelect } from '../../components/common/PaymentSelect/PaymentSelect';
+import { TicketItem } from '../../components/common/TicketItem/TicketItem';
 
 // Constants and types
-import { TICKET_TYPES } from '../../constants/tickets';
 import { PAYMENT_TYPES } from '../../constants/payment';
-import { PaymentData, CreditCardStatus } from '../../types/payment';
+import { TICKET_TYPES } from '../../constants/tickets';
+import { CreditCardStatus, PaymentData } from '../../types/payment';
 
 // Custom hooks
-import { useTapPay } from '../../hooks/useTapPay';
-import { usePaymentState } from '../../hooks/usePaymentState';
-import { usePaymentMethods } from '../../hooks/usePaymentMethods';
 import { SuccessOrError } from '../../components/common/SuccessOrError/SuccessOrError';
+import { usePaymentMethods } from '../../hooks/usePaymentMethods';
+import { usePaymentState } from '../../hooks/usePaymentState';
+import { useTapPay } from '../../hooks/useTapPay';
 
+import { ROUTES } from '../../constants/routes';
 import './Payment.scss';
 
 export const Payment: React.FC = () => {
@@ -58,7 +59,7 @@ export const Payment: React.FC = () => {
     const loadPaymentData = () => {
       const storedData = sessionStorage.getItem('ticketOrderData');
       if (!storedData) {
-        navigate('/booking');
+        navigate(ROUTES.BOOKING);
         return;
       }
 
@@ -67,7 +68,7 @@ export const Payment: React.FC = () => {
         setPaymentData(data);
       } catch (error) {
         console.error('解析訂單資料失敗:', error);
-        navigate('/booking');
+        navigate(ROUTES.BOOKING);
       }
     };
 
@@ -75,7 +76,7 @@ export const Payment: React.FC = () => {
   }, [navigate]);
 
   // Event handlers
-  const handleBackToBooking = () => navigate('/booking');
+  const handleBackToBooking = () => navigate(ROUTES.BOOKING);
   const handlePayment = () => {
     setPaymentStatus('false');
     console.log('處理付款:', paymentData);
@@ -103,7 +104,7 @@ export const Payment: React.FC = () => {
   return (
     <>
       {paymentStatus === 'form' && (
-        <div className="payment-container">
+        <div className="form-container payment-container">
           <h1>確認訂單</h1>
 
           <div className="order-content">
@@ -205,7 +206,7 @@ export const Payment: React.FC = () => {
           titlePrefix="購買"
           successText="成功"
           successButtonText="前往我的票券"
-          onSuccessClick={() => navigate('/tickets')}
+          onSuccessClick={() => navigate(ROUTES.TICKETS)}
         />
       )}
 
@@ -218,7 +219,7 @@ export const Payment: React.FC = () => {
           retryButtonText="前往購買票券"
           backButtonText="返回票券系統"
           onRetryClick={() => setPaymentStatus('form')}
-          onBackClick={() => navigate('/')}
+          onBackClick={() => navigate(ROUTES.HOME)}
         />
       )}
     </>

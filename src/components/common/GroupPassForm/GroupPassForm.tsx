@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import './GroupPassForm.scss';
 
 export interface GroupPassFormData {
@@ -71,7 +71,6 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
 
     // 只有在數量真的變化時才處理
     if (prevQuantityRef.current !== quantity && currentLength !== quantity) {
-
       if (quantity > currentLength) {
         // 增加欄位 - 使用 append 而不是 replace
         const toAdd = quantity - currentLength;
@@ -121,7 +120,10 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
       const currentUsersString = JSON.stringify(currentValues.users);
 
       // 只有在資料真正變化時才通知父組件
-      if (onFormDataChange && prevFormValuesRef.current !== currentUsersString) {
+      if (
+        onFormDataChange &&
+        prevFormValuesRef.current !== currentUsersString
+      ) {
         currentValues.users.forEach((user, index) => {
           onFormDataChange(index, user);
         });
@@ -135,7 +137,10 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
     return () => clearInterval(interval);
   }, [getValues, onFormDataChange, mode]);
 
-  const handleBlur = async (index: number, field: 'name' | 'email' | 'church' | 'phone') => {
+  const handleBlur = async (
+    index: number,
+    field: 'name' | 'email' | 'church' | 'phone'
+  ) => {
     await trigger(`users.${index}.${field}` as any);
   };
 
@@ -145,19 +150,26 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
   //   console.log('手動檢查表單值:', values);
   // };
 
-
-
   if (quantity === 0) {
     return null;
   }
 
   return (
     <div className="group-pass-form">
-      <p className={`group-pass-form-title ${mode !== 'edit' && 'group-pass-form-record-title'}`}> {mode === 'edit' ? '請填寫實際使用此票券者之資訊' : '請確認實際使用此票券者之資訊'} </p>
+      <p
+        className={`group-pass-form-title ${mode !== 'edit' && 'group-pass-form-record-title'}`}
+      >
+        {' '}
+        {mode === 'edit'
+          ? '請填寫實際使用此票券者之資訊'
+          : '請確認實際使用此票券者之資訊'}{' '}
+      </p>
       {fields.map((field, index) => (
         <details key={field.id} className="group-pass-form-details">
           <summary>
-            <span className={`title ${mode !== 'edit' && 'record-title'}`}>使用者{index + 1}</span>
+            <span className={`title ${mode !== 'edit' && 'record-title'}`}>
+              使用者{index + 1}
+            </span>
             <svg
               className="icon arrow-up"
               viewBox="0 0 24 24"
@@ -180,7 +192,9 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
           <div className="group-pass-form-content">
             <div className="group-pass-form-input">
               <div className="form-item">
-                <div className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}>
+                <div
+                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                >
                   <label htmlFor={`name-${index}`}>使用者姓名</label>
                 </div>
                 {mode === 'edit' ? (
@@ -192,7 +206,8 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
                       placeholder="請輸入使用者姓名"
                       {...register(`users.${index}.name`, {
                         required: '請輸入使用者姓名',
-                        validate: value => value?.trim() ? true : '請輸入使用者姓名',
+                        validate: value =>
+                          value?.trim() ? true : '請輸入使用者姓名',
                       })}
                       onBlur={() => handleBlur(index, 'name')}
                       aria-label="請輸入使用者姓名"
@@ -205,11 +220,15 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
                     )}
                   </>
                 ) : (
-                  <p className="form-record-item">{watchedUsers?.[index]?.name}</p>
+                  <p className="form-record-item">
+                    {watchedUsers?.[index]?.name}
+                  </p>
                 )}
               </div>
               <div className="form-item">
-                <div className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}>
+                <div
+                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                >
                   <label htmlFor={`email-${index}`}>電子郵件</label>
                 </div>
                 {mode === 'edit' ? (
@@ -243,7 +262,9 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
             </div>
             <div className="group-pass-form-input">
               <div className="form-item">
-                <div className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}>
+                <div
+                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                >
                   <label htmlFor={`church-${index}`}>所屬教會名稱</label>
                 </div>
                 {mode === 'edit' ? (
@@ -255,7 +276,8 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
                       placeholder="請輸入所屬教會名稱"
                       {...register(`users.${index}.church`, {
                         required: '請輸入所屬教會名稱',
-                        validate: value => value?.trim() ? true : '請輸入所屬教會名稱',
+                        validate: value =>
+                          value?.trim() ? true : '請輸入所屬教會名稱',
                       })}
                       onBlur={() => handleBlur(index, 'church')}
                       aria-label="請輸入所屬教會名稱"
@@ -272,7 +294,9 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
                 )}
               </div>
               <div className="form-item">
-                <div className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}>
+                <div
+                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                >
                   <label htmlFor={`phone-${index}`}>所屬教會電話</label>
                 </div>
                 {mode === 'edit' ? (
@@ -284,7 +308,8 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
                       placeholder="請輸入所屬教會電話"
                       {...register(`users.${index}.phone`, {
                         required: '請輸入所屬教會電話',
-                        validate: value => value?.trim() ? true : '請輸入所屬教會電話',
+                        validate: value =>
+                          value?.trim() ? true : '請輸入所屬教會電話',
                       })}
                       onBlur={() => handleBlur(index, 'phone')}
                       aria-label="請輸入所屬教會電話"

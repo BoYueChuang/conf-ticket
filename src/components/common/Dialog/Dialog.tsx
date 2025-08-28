@@ -5,7 +5,8 @@ interface DialogProps {
   isShowButton?: boolean; // 是否顯示確認和取消按鈕
   isOpen: boolean;
   onClose: () => void;
-  title?: string;
+  title1?: string;
+  title2?: string;
   children: React.ReactNode;
   confirmText?: string;
   cancelText?: string;
@@ -19,7 +20,8 @@ interface DialogProps {
 const Dialog: React.FC<DialogProps> = ({
   isOpen,
   onClose,
-  title,
+  title1,
+  title2,
   children,
   confirmText = '確認',
   cancelText = '取消',
@@ -97,7 +99,8 @@ const Dialog: React.FC<DialogProps> = ({
       <div className={`dialog-container ${className}`}>
         {/* 標題區域 */}
         <div className="dialog-header">
-          <h2 className="dialog-title">{title}</h2>
+          <h1 className="dialog-title">{title1}</h1>
+          <h1 className="dialog-title">{title2}</h1>
           {showCloseButton && (
             <button className="dialog-close-btn" onClick={onClose}>
               ✕

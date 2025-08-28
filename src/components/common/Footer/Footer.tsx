@@ -36,8 +36,10 @@ export const Footer: React.FC = () => {
         </div>
         <div className="footer-info">
           <p>© thehope.co all rights reserved.</p>
-          <div className='footer-links'>
-            <p onClick={() => setPrivacyPolicyDialogOpen(true)}>隱私權保護政策</p>
+          <div className="footer-links">
+            <p onClick={() => setPrivacyPolicyDialogOpen(true)}>
+              隱私權保護政策
+            </p>
             <p onClick={() => setUserTermsDialogOpen(true)}>使用者條款</p>
           </div>
         </div>
@@ -46,12 +48,14 @@ export const Footer: React.FC = () => {
         isShowButton={false}
         isOpen={isUserTermsDialogOpen}
         onClose={() => setUserTermsDialogOpen(false)}
-        title="使用者條款"
+        title1="使用者條款"
       >
         <div>
           <p>
-            <strong>2.</strong>{' '}
-            憑票申請購票，回一書暨口罩接觸對效果或定全部恕兼，但右覺用暴標辦，或使用暫FUN、動滋券折抵等虛享優惠，則需依套畫承或電器申請提回，恕無法讓部份票券，請依相關公告說明辦理。
+            <strong>第1條（目的與適用範圍）</strong> 本條款旨在保障 The Hope
+            教會線上購票系統（以下簡稱「本系統」）之安全與使用流程順暢，規範使用者於本系統註冊
+            The Hope Conference
+            ID（以下簡稱「本ID」）並進行購票、登入與操作時，所應遵守之事項、權利與義務。
           </p>
 
           <p>
@@ -79,7 +83,7 @@ export const Footer: React.FC = () => {
         isShowButton={false}
         isOpen={isPrivacyPolicyDialogOpen}
         onClose={() => setPrivacyPolicyDialogOpen(false)}
-        title="隱私權保護政策"
+        title1="隱私權保護政策"
       >
         <div>
           <p>

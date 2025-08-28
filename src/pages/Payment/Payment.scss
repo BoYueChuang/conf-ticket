@@ -1,10 +1,5 @@
 .payment-container {
   max-width: 834px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 36px 40px 52px 40px;
-  border-radius: 12px;
-  background: #fff;
 
   h1 {
     color: var(--black, #000);
@@ -80,10 +75,8 @@
 @media screen and (max-width: 768px) {
   .payment-container {
     max-width: 353px;
-    padding: 28px 16px 40px 16px;
 
     h1 {
-      font-size: 28px;
       margin-bottom: 24px;
     }
 

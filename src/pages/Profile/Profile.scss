@@ -51,10 +51,21 @@
         align-items: center;
         gap: 5px;
 
-        a {
+        a,
+        .link-button {
           color: #3c5464;
           font-weight: 600;
           text-decoration: underline;
+          background: none;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          font-family: inherit;
+          font-size: inherit;
+        }
+
+        .link-button:hover {
+          color: #2a3e4a;
         }
       }
     }

@@ -1,13 +1,14 @@
-import { useState, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import './TicketDistribution.scss';
-import {
-  TicketInfo,
-  RecipientInfo,
-  TicketDistributionProps,
-} from '../../components/interface/TicketDistribution';
+import { useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Dialog from '../../components/common/Dialog/Dialog';
 import { SuccessOrError } from '../../components/common/SuccessOrError/SuccessOrError';
+import {
+  RecipientInfo,
+  TicketDistributionProps,
+  TicketInfo,
+} from '../../components/interface/TicketDistribution';
+import { ROUTES } from '../../constants/routes';
+import './TicketDistribution.scss';
 
 export const TicketDistribution: React.FC<TicketDistributionProps> = ({
   ticketInfo,
@@ -137,8 +138,6 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
 
     setTicketDistributionDialogOpen(false);
     setDistributionStatus('false');
-    // 這裡可以呼叫 API 處理分票邏輯
-    // navigate('/distribution/success');
   };
 
   // Dialog 取消處理
@@ -154,7 +153,10 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
   return (
     <>
       {distributionStatus === 'form' && (
-        <form className="distribution-container" onSubmit={onSubmit}>
+        <form
+          className="form-container distribution-container"
+          onSubmit={onSubmit}
+        >
           <div className="distribution-header">
             <h1>填寫取票者資訊</h1>
             <div className="distribution-header-content">
@@ -274,7 +276,7 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
           titlePrefix="分票"
           successText="成功"
           successButtonText="返回我的票券"
-          onSuccessClick={() => navigate('/tickets')}
+          onSuccessClick={() => navigate(ROUTES.TICKETS)}
         />
       )}
 
@@ -287,7 +289,7 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
           retryButtonText="再試一次"
           backButtonText="返回票券系統"
           onRetryClick={() => setDistributionStatus('form')}
-          onBackClick={() => navigate('/')}
+          onBackClick={() => navigate(ROUTES.HOME)}
         />
       )}
 

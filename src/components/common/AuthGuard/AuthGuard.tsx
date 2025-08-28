@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { apiService } from '../../../api/fetchService';
+import { ROUTES } from '../../../constants/routes';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -28,7 +29,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
 
         // 重定向到登入頁面
         console.log('🔄 AuthGuard: Redirecting to login...');
-        navigate('/login', {
+        navigate(ROUTES.LOGIN, {
           replace: true,
           state: { from: location.pathname }, // 記住來源頁面
         });
@@ -52,7 +53,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({ children, fallback }) => {
 
       // 重定向到登入頁面
       console.log('🔄 AuthGuard: Redirecting to login...');
-      navigate('/login', {
+      navigate(ROUTES.LOGIN, {
         replace: true,
         state: { from: location.pathname }, // 記住來源頁面
       });
