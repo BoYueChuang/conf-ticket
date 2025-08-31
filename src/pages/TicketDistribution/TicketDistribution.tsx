@@ -45,6 +45,9 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
   const [isTicketDistributionDialogOpen, setTicketDistributionDialogOpen] =
     useState(false);
 
+  // 表單錯誤狀態
+  const [formError, setFormError] = useState('');
+
   // 郵件驗證函式
   const validateEmail = (email: string): boolean => {
     if (!email.trim()) return false;
@@ -67,6 +70,9 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
     const isEmailValid = validateEmail(email);
     const isDuplicate = checkDuplicateEmail(email, recipientId);
 
+    // 清除表單錯誤
+    if (formError) setFormError('');
+
     setRecipients(prev =>
       prev.map(recipient => {
         if (recipient.id === recipientId) {
@@ -86,6 +92,9 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
 
   // 處理 checkbox 狀態變更
   const handleCheckboxChange = (recipientId: string, isChecked: boolean) => {
+    // 清除表單錯誤
+    if (formError) setFormError('');
+
     setRecipients(prev =>
       prev.map(recipient => {
         if (recipient.id === recipientId) {
@@ -117,11 +126,12 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
     );
 
     if (selectedRecipients.length === 0) {
-      alert('請至少選擇一個取票者');
+      setFormError('請至少輸入一位取票者資訊');
       return;
     }
 
-    // 顯示確認 Dialog
+    // 清除錯誤訊息並顯示確認 Dialog
+    setFormError('');
     setTicketDistributionDialogOpen(true);
   };
 
@@ -245,13 +255,19 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
                 </div>
               );
             })}
+
+            {/* 表單錯誤訊息 */}
+            {formError && (
+              <div className="form-error-container">
+                <p className="error-text">{formError}</p>
+              </div>
+            )}
           </div>
 
           <div className="distribution-footer">
             <button
-              className={`btn send-btn ${
-                !hasValidEmail || !hasSelectedRecipients ? 'disabled' : ''
-              }`}
+              className={`btn send-btn ${!hasValidEmail || !hasSelectedRecipients ? 'disabled' : ''
+                }`}
               type="submit"
               disabled={!hasValidEmail || !hasSelectedRecipients}
             >
@@ -334,3 +350,4 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
     </>
   );
 };
+

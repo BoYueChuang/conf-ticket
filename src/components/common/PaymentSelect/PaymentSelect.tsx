@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { Select } from "../Select/Select";
+import { PAYMENT_TYPES } from "../../../constants/payment";
 import './PaymentSelect.scss';
-
-const PAYMENT_TYPES = {
-    APPLE_PAY: "apple-pay",
-    GOOGLE_PAY: "google-pay",
-    SAMSUNG_PAY: "samsung-pay",
-    CREDIT_CARD: "credit-card",
-};
 
 interface PaymentSelectProps {
     value?: string;

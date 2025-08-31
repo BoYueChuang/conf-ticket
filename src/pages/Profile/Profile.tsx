@@ -7,29 +7,9 @@ import {
 import { NotificationMessage } from '../../components/common/Notification/Notification';
 import { Select } from '../../components/common/Select/Select';
 import { ROUTES } from '../../constants/routes';
+import { GENDER_OPTIONS, CHURCH_OPTIONS, CHURCH_IDENTITY_OPTIONS } from '../../constants/profile';
 import './Profile.scss';
-
-// Select 選項常數
-const GENDER_OPTIONS = [
-  { id: 'male', label: '男' },
-  { id: 'female', label: '女' },
-];
-
-const CHURCH_OPTIONS = [
-  { id: 'taipei', label: 'The Hope 台北分部' },
-  { id: 'taichung', label: 'The Hope 台中分部' },
-  { id: 'online', label: 'The Hope 線上分部' },
-  { id: 'other', label: '其他' },
-];
-
-const CHURCH_IDENTITY_OPTIONS = [
-  { id: 'senior-pastor', label: '主任牧師' },
-  { id: 'pastor', label: '牧師' },
-  { id: 'minister ', label: '傳道' },
-  { id: 'student', label: '神學生' },
-  { id: 'full-time', label: '全職同工' },
-  { id: 'congregation ', label: '一般參加者' },
-];
+import { useAuthContext } from '../../contexts/AuthContext';
 
 export const Profile: React.FC = () => {
   const [showNotification, setShowNotification] = useState('');
@@ -44,6 +24,9 @@ export const Profile: React.FC = () => {
   const [isUserTermsChecked, setUserTermsChecked] = React.useState(false);
   const [isPrivacyPolicyChecked, setPrivacyPolicyChecked] =
     React.useState(false);
+
+  const { user } = useAuthContext();
+  console.log('User Info:', user);
 
   const [fields, setFields] = useState({
     fullName: '',
@@ -82,16 +65,6 @@ export const Profile: React.FC = () => {
   const handlePrivacyPolicyCancel = () => {
     setPrivacyPolicyDialogOpen(false);
   };
-
-  useEffect(() => {
-    const fromLogin = sessionStorage.getItem('fromLogin');
-
-    if (fromLogin === 'true') {
-      setShowNotification('true');
-      // 立即清除標記
-      sessionStorage.removeItem('fromLogin');
-    }
-  }, []);
 
   // 儲存個人檔案
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -146,16 +119,16 @@ export const Profile: React.FC = () => {
   // 通用輸入變更處理
   const handleFieldChange =
     (fieldName: keyof typeof fields) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setFields(prev => ({ ...prev, [fieldName]: value }));
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setFields(prev => ({ ...prev, [fieldName]: value }));
 
-      // 即時驗證
-      if (errors[fieldName]) {
-        const requiredMsg = validateField(value, fieldName);
-        setErrors(prev => ({ ...prev, [fieldName]: requiredMsg }));
-      }
-    };
+        // 即時驗證
+        if (errors[fieldName]) {
+          const requiredMsg = validateField(value, fieldName);
+          setErrors(prev => ({ ...prev, [fieldName]: requiredMsg }));
+        }
+      };
 
   // 通用 blur 驗證
   const handleFieldBlur = (fieldName: keyof typeof fields) => () => {

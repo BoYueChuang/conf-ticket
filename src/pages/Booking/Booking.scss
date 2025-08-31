@@ -1,5 +1,6 @@
 .booking-container {
   max-width: 834px;
+  padding: 36px 40px 52px 40px !important;
 
   h1 {
     margin-bottom: 48px;
@@ -37,6 +38,7 @@
 @media screen and (max-width: 768px) {
   .booking-container {
     max-width: 353px;
+    padding: 28px 16px 40px 16px !important;
 
     h1 {
       margin-bottom: 24px;

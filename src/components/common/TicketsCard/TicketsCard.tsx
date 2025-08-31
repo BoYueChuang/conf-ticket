@@ -1,4 +1,7 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../../constants/routes';
+import { TICKET_STATUS, TicketStatusType } from '../../../constants/tickets';
 import './TicketsCard.scss';
 
 interface TicketProps {
@@ -10,6 +13,7 @@ interface TicketProps {
   quantity: number;
   orderNumber: string;
   details: string[];
+  status?: TicketStatusType;
 }
 
 export const TicketsCard: React.FC<TicketProps> = ({
@@ -21,9 +25,12 @@ export const TicketsCard: React.FC<TicketProps> = ({
   quantity,
   orderNumber,
   details,
+  status,
 }) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="ticket-card-container">
+    <div className={`ticket-card-container ${status === TICKET_STATUS.REFUNDED ? 'ticket-refund-card-container' : ''}`}>
       <div className="ticket-card-title">{title}</div>
       <div className="ticket-card-content">
         <img
@@ -67,27 +74,31 @@ export const TicketsCard: React.FC<TicketProps> = ({
           </div>
         </div>
       </div>
-      <div className="ticket-card-btns">
-        <div className="distribution">
-          <p className="text">前往分票</p>
-          <img
-            src="/src/assets/images/white-arrow-right-icon.svg"
-            alt=""
-            className="arrow"
-          />
+      {status === TICKET_STATUS.PURCHASED && (
+        <div className="ticket-card-btns">
+          <div className="distribution" onClick={() => navigate(ROUTES.TICKET_DISTRIBUTION)}>
+            <p className="text">前往分票</p>
+            <img
+              src="/src/assets/images/white-arrow-right-icon.svg"
+              alt=""
+              className="arrow"
+            />
+          </div>
+          <div className="refund">
+            <p className="text" onClick={() => navigate(ROUTES.REFUND)}>申請退票</p>
+            <img
+              src="/src/assets/images/white-arrow-right-icon.svg"
+              alt=""
+              className="arrow"
+            />
+          </div>
         </div>
-        <div className="refund">
-          <p className="text">申請退票</p>
-          <img
-            src="/src/assets/images/white-arrow-right-icon.svg"
-            alt=""
-            className="arrow"
-          />
+      )}
+      {status === TICKET_STATUS.REFUNDED && (
+        <div className="ticket-card-refund">
+          <p className="refund-text">已於2026.04.30完成退票手續</p>
         </div>
-      </div>
-      <div className="ticket-card-refund">
-        <p className="refund-text">已於2026.04.30完成退票手續</p>
-      </div>
+      )}
       <details className="ticket-card-details">
         <summary>
           <span className="title">票券詳情</span>
@@ -123,3 +134,4 @@ export const TicketsCard: React.FC<TicketProps> = ({
     </div>
   );
 };
+

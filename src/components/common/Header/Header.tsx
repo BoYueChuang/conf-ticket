@@ -10,9 +10,11 @@ export const Header: React.FC<HeaderProps> = ({ title: _title = 'CONF TICKET' })
   const token = localStorage.getItem('auth_token');
 
   return (
-    <header className="header">
-      <img src="/src/assets/images/logo.png" alt="" />
-      <p>{token ? '登出' : '前往票券系統'}</p>
-    </header>
+    <>
+      <header className="header">
+        <img src="/src/assets/images/logo.png" alt="" />
+        <p>{token ? '登出' : '前往票券系統'}</p>
+      </header>
+    </>
   );
 };

@@ -50,14 +50,11 @@ export const Refund: React.FC = () => {
                     <span className="number">1.</span>退款將會酌收10%手續費
                   </li>
                   <li>
-                    <span className="number">2.</span>退將於 20
-                    個工作天退款至原先付款的方式
+                    <span className="number">2.</span>將於 20 個工作天退款至原先付款的方式
                   </li>
                   <li>
                     <span className="number">3.</span>
-                    辦理退票後，銀行入帳時間會因機構不同略有差異，請以銀行回報為準。若原付款交易超過
-                    180
-                    天，因銀行端技術限制可能需透過其他方式退費，具體方式將另行通知。
+                    辦理退票後，銀行入帳時間會因機構不同略有差異，請以銀行回報為準。若原付款交易超過 180 天，因銀行端技術限制可能需透過其他方式退費，具體方式將另行通知。
                   </li>
                   <li>
                     <span className="number">4.</span>
@@ -239,3 +236,4 @@ export const Refund: React.FC = () => {
     </>
   );
 };
+

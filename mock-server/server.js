@@ -1,5 +1,5 @@
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -61,8 +61,8 @@ app.post('/v1/auth', (req, res) => {
   res.json(login);
 });
 
-app.get('/v1/auth/callback', (req, res) => {
-  const login = readDB('authCallBack.json');
+app.get('/v1/members', (req, res) => {
+  const login = readDB('members.json');
   res.json(login);
 });
 
@@ -206,3 +206,4 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log('Conference Ticket API Server Started!');
 });
+
