@@ -133,35 +133,13 @@ export const apiService = {
       const response = await fetchClient.post('/v1/auth', email);
       return response;
     },
-
-    getCurrentUser: () => fetchClient.get('/auth/me'),
   },
   members: {
     members: async () => {
       const response = await fetchClient.get(`/v1/members?page=1&limit=1&sort=-createdAt&where%5Bemail%5D%5Bequals%5D=${encodeURIComponent(localStorage.getItem(EMAIL_KEY) as string)}`);
       return response;
     },
-  },
-  // 其他 API 保持不變
-  users: {
-    getAll: () => fetchClient.get('/users'),
-    getById: (id: string) => fetchClient.get(`/users/${id}`),
-    create: (data: any) => fetchClient.post('/users', data),
-  },
-
-  tickets: {
-    getAll: (params?: any) => fetchClient.get('/tickets', params),
-    getById: (id: string) => fetchClient.get(`/tickets/${id}`),
-  },
-
-  orders: {
-    getAll: (params?: any) => fetchClient.get('/orders', params),
-    create: (data: any) => fetchClient.post('/orders', data),
-  },
-
-  branches: {
-    getAll: () => fetchClient.get('/branches'),
-  },
+  }
 };
 
 export { fetchClient };

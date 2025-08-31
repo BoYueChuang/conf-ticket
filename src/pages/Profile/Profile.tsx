@@ -9,6 +9,7 @@ import { Select } from '../../components/common/Select/Select';
 import { ROUTES } from '../../constants/routes';
 import { GENDER_OPTIONS, CHURCH_OPTIONS, CHURCH_IDENTITY_OPTIONS } from '../../constants/profile';
 import './Profile.scss';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 export const Profile: React.FC = () => {
   const [showNotification, setShowNotification] = useState('');
@@ -23,6 +24,9 @@ export const Profile: React.FC = () => {
   const [isUserTermsChecked, setUserTermsChecked] = React.useState(false);
   const [isPrivacyPolicyChecked, setPrivacyPolicyChecked] =
     React.useState(false);
+
+  const { user } = useAuthContext();
+  console.log('User Info:', user);
 
   const [fields, setFields] = useState({
     fullName: '',
@@ -61,16 +65,6 @@ export const Profile: React.FC = () => {
   const handlePrivacyPolicyCancel = () => {
     setPrivacyPolicyDialogOpen(false);
   };
-
-  useEffect(() => {
-    const fromLogin = sessionStorage.getItem('fromLogin');
-
-    if (fromLogin === 'true') {
-      setShowNotification('true');
-      // 立即清除標記
-      sessionStorage.removeItem('fromLogin');
-    }
-  }, []);
 
   // 儲存個人檔案
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

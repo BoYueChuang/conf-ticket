@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TicketsCard } from '../../components/common/TicketsCard/TicketsCard';
-import { ProtectedRoute } from '../../components/common/ProtectedRoute/ProtectedRoute';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { ROUTES } from '../../constants/routes';
 import { TICKET_ALERT_MESSAGES, TICKET_STATUS, TicketStatusType } from '../../constants/tickets';
 import './Tickets.scss';
 
-const TicketsContent: React.FC = () => {
+export const Tickets = () => {
   const navigate = useNavigate();
   const { user, memberData } = useAuthContext(); // 取得用戶資料和完整的 API response
   const [activeStatus, setActiveStatus] = useState<TicketStatusType>(TICKET_STATUS.COLLECTED);
@@ -183,12 +182,3 @@ const TicketsContent: React.FC = () => {
     </>
   );
 };
-
-export const Tickets: React.FC = () => {
-  return (
-    <ProtectedRoute>
-      <TicketsContent />
-    </ProtectedRoute>
-  );
-};
-
