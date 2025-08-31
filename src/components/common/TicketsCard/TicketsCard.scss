@@ -34,6 +34,7 @@
         padding: 10px 16px;
         align-items: center;
         justify-content: space-between;
+        background-color: #ECEEF0;
 
         .ticket-card-info-start {
           display: flex;
@@ -156,6 +157,7 @@
       background-color: #1d292e;
       gap: 8px;
       flex: 4;
+      cursor: pointer;
     }
 
     .refund {
@@ -167,6 +169,7 @@
       background-color: #3c5464;
       gap: 8px;
       flex: 1;
+      cursor: pointer;
     }
 
     .text {
@@ -190,9 +193,25 @@
     background-color: #c5ccd1;
     border-radius: 0 0 12px 12px;
 
+    /* 當開啟時改變背景顏色 */
+    &[open] {
+      background-color: #F2F2F2;
+    }
+
     /* 預設顯示加號，隱藏減號 */
     .icon.plus {
       display: block;
+    }
+
+    /* 當開啟時改變 title 和 icon 顏色 */
+    &[open] summary {
+      .title {
+        color: #000;
+      }
+
+      .icon {
+        color: #000;
+      }
     }
 
     .icon.minus {
@@ -234,19 +253,15 @@
       .title {
         font-size: 16px;
         font-weight: 600;
-        color: #000;
+        color: #3C5464;
       }
 
       .icon {
         width: 20px;
         height: 20px;
         transition: transform 0.3s ease;
-        color: #000;
+        color: #3C5464;
         padding-top: 1px;
-      }
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.02);
       }
     }
 
@@ -268,8 +283,69 @@
 
         .text {
           font-size: 14px;
-          color: #000;
+          color: #182228;
           line-height: 1.5;
+        }
+      }
+    }
+  }
+}
+
+.ticket-refund-card-container {
+  .ticket-card-title {
+    background: #D2D4D5 !important;
+    color: #777F82 !important;
+  }
+
+  .ticket-card-content {
+    .ticket-card-info {
+      .ticket-card-info-time {
+        background-color: #E8EAEA !important;
+
+        .ticket-card-info-start {
+          .year {
+            color: #777F82 !important;
+          }
+
+          .ticket-card-info-date {
+            .date {
+              color: #777F82 !important;
+            }
+
+            .ticket-card-info-day {
+              p {
+                color: #777F82 !important;
+              }
+            }
+          }
+        }
+
+        .ticket-card-info-line {
+          background: #777F82 !important;
+        }
+      }
+
+      .ticket-card-info-quantity-order {
+        background-color: #F2F2F2;
+
+        .ticket-card-info-quantity-item {
+          .quantity {
+            color: #777F82;
+          }
+
+          .number {
+            color: #777F82;
+          }
+        }
+
+        .ticket-card-info-oreder-number-item {
+          .order-number {
+            color: #777f82;
+          }
+
+          .number {
+            color: #777F82;
+          }
         }
       }
     }

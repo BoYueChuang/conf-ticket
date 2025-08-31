@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { apiService, fetchClient } from '../../api/fetchService';
+import { apiService } from '../../api/fetchService';
 import './Login.scss';
 
 const OTP_TIMER_KEY = 'otpTimerEndTime';
 const EMAIL_KEY = 'loginEmail';
-const TIMER_DURATION = 300; // 5分鐘
+const TIMER_DURATION = 2; // 5分鐘
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -45,7 +45,6 @@ export const Login: React.FC = () => {
         if (prevSeconds <= 1) {
           // 計時結束，清除 localStorage 並切換到輸入 email 狀態
           localStorage.removeItem(OTP_TIMER_KEY);
-          localStorage.removeItem(EMAIL_KEY);
           setIsEmailSubmitted(false);
           return 0;
         }
@@ -105,10 +104,7 @@ export const Login: React.FC = () => {
       }
 
       // 調用發送 OTP 的 API
-      const response = await apiService.auth.auth({ email });
-      fetchClient.setToken('sadasasdas');
-
-      console.log('OTP 發送成功：', response);
+      await apiService.memberAuthentication.auth({ email });
 
       // 成功後切換到 OTP 輸入階段
       setIsEmailSubmitted(true);
@@ -128,7 +124,7 @@ export const Login: React.FC = () => {
     try {
       setIsLoading(true);
 
-      const response = await apiService.auth.auth({ email });
+      const response = await apiService.memberAuthentication.auth({ email });
       resetTimer();
       console.log('OTP 發送成功：', response);
     } catch (error: any) {
@@ -222,3 +218,4 @@ export const Login: React.FC = () => {
     </div>
   );
 };
+

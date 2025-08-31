@@ -58,23 +58,22 @@
         }
 
         .status-count-wrapper {
-          display: flex;
+          position: relative;
           width: 24px;
           height: 24px;
           padding: 10px;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
           border-radius: 30px;
           background: #bbbfc0;
 
           .status-count {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: #e8eaea;
-            text-align: center;
             font-size: 13px;
-            font-style: normal;
             font-weight: 600;
+            margin: 0;
           }
         }
       }
@@ -157,17 +156,6 @@
           .status-title {
             font-size: 13px;
           }
-
-          // .status-count-wrapper {
-          //   width: 22px;
-          //   height: 22px;
-          //   padding: 10px;
-
-          //   .status-count {
-          //     font-size: 11px;
-          //     line-height: 11px;
-          //   }
-          // }
         }
       }
     }

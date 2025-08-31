@@ -1,3 +1,5 @@
+import { ROUTES } from "../constants/routes";
+
 class FetchService {
   private baseURL: string;
   private readonly TOKEN_KEY = 'auth_token';
@@ -9,7 +11,6 @@ class FetchService {
   //  Token 管理方法
   setToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
-    console.log('🔐 Token saved to localStorage');
   }
 
   getToken(): string | null {
@@ -18,7 +19,6 @@ class FetchService {
 
   clearToken(): void {
     localStorage.removeItem(this.TOKEN_KEY);
-    console.log('🗑️ Token removed from localStorage');
   }
 
   hasToken(): boolean {
@@ -44,7 +44,6 @@ class FetchService {
         ...defaultOptions.headers,
         Authorization: `Bearer ${token}`,
       };
-      console.log('🔑 Added Bearer token to request');
     }
 
     // 合併設定
@@ -65,7 +64,7 @@ class FetchService {
         this.clearToken();
 
         // 重定向到登入頁面
-        window.location.href = '/login';
+        window.location.href = ROUTES.LOGIN;
       }
 
       if (!response.ok) {
@@ -124,51 +123,25 @@ class FetchService {
 }
 
 const fetchClient = new FetchService('/api');
+const EMAIL_KEY = 'loginEmail';
 
 //  API 服務定義
 export const apiService = {
   // 認證相關 API
-  auth: {
+  memberAuthentication: {
     auth: async (email: { email: string }) => {
       const response = await fetchClient.post('/v1/auth', email);
       return response;
     },
 
-    authCallBack: async (otp: string): Promise<{ token: string }> => {
-      const response = await fetchClient.get(`/v1/auth/callback?t=${otp}`);
-      //  登入成功後自動儲存 token
-      if (response.token) {
-        fetchClient.setToken(response.token);
-        console.log('✅ Login successful, token saved');
-      }
-
+    getCurrentUser: () => fetchClient.get('/auth/me'),
+  },
+  members: {
+    members: async () => {
+      const response = await fetchClient.get(`/v1/members?page=1&limit=1&sort=-createdAt&where%5Bemail%5D%5Bequals%5D=${encodeURIComponent(localStorage.getItem(EMAIL_KEY) as string)}`);
       return response;
     },
-
-    logout: async () => {
-      try {
-        // 先調用後端登出 API
-        await fetchClient.post('/auth/logout', {});
-      } catch (error) {
-        console.warn(
-          '⚠️ Backend logout failed, but clearing local token anyway'
-        );
-      } finally {
-        // 清除本地 token
-        fetchClient.clearToken();
-        console.log('✅ Logout completed, token cleared');
-      }
-    },
-
-    getCurrentUser: () => fetchClient.get('/auth/me'),
-
-    // Token 管理方法（供外部使用）
-    setToken: (token: string) => fetchClient.setToken(token),
-    clearToken: () => fetchClient.clearToken(),
-    hasToken: () => fetchClient.hasToken(),
-    getToken: () => fetchClient.getToken(),
   },
-
   // 其他 API 保持不變
   users: {
     getAll: () => fetchClient.get('/users'),
@@ -191,5 +164,5 @@ export const apiService = {
   },
 };
 
-// 匯出 fetchClient 供其他地方使用
 export { fetchClient };
+
