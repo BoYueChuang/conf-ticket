@@ -17,53 +17,53 @@ const TicketsContent: React.FC = () => {
   console.log('User Info:', user);
 
   const allTickets: any = [
-    // {
-    //   id: 1,
-    //   title: "SPECIAL A PASS",
-    //   startDate: "05.01",
-    //   endDate: "05.03",
-    //   startTime: "18:00",
-    //   endTime: "21:30",
-    //   quantity: 1,
-    //   orderNumber: "1139475023",
-    //   status: TICKET_STATUS.PURCHASED,
-    //   details: [
-    //     "特會全場次＆WORKSHOP＆特會影片（一個月線上觀看權限）",
-    //     "5/2 與 Wade Joye 牧師午餐及 Live QA",
-    //     "5/3 與 Pastors 午餐及 Live QA（與談牧者：高力豪牧師、周學正牧師、柳子駿牧師、葉豐軒牧師）"
-    //   ]
-    // },
-    // {
-    //   id: 2,
-    //   title: "VIP PASS",
-    //   startDate: "05.02",
-    //   endDate: "05.03",
-    //   startTime: "19:00",
-    //   endTime: "22:00",
-    //   quantity: 2,
-    //   orderNumber: "1139475024",
-    //   status: TICKET_STATUS.COLLECTED,
-    //   details: [
-    //     "特會全場次入場權限",
-    //     "VIP 座位區域",
-    //     "專屬休息區使用權"
-    //   ]
-    // },
-    // {
-    //   id: 3,
-    //   title: "GENERAL PASS",
-    //   startDate: "05.03",
-    //   endDate: "05.03",
-    //   startTime: "20:00",
-    //   endTime: "21:30",
-    //   quantity: 1,
-    //   orderNumber: "1139475025",
-    //   status: TICKET_STATUS.REFUNDED,
-    //   details: [
-    //     "特會當日入場權限",
-    //     "一般座位區域"
-    //   ]
-    // }
+    {
+      id: 1,
+      title: "SPECIAL A PASS",
+      startDate: "05.01",
+      endDate: "05.03",
+      startTime: "18:00",
+      endTime: "21:30",
+      quantity: 1,
+      orderNumber: "1139475023",
+      status: TICKET_STATUS.PURCHASED,
+      details: [
+        "特會全場次＆WORKSHOP＆特會影片（一個月線上觀看權限）",
+        "5/2 與 Wade Joye 牧師午餐及 Live QA",
+        "5/3 與 Pastors 午餐及 Live QA（與談牧者：高力豪牧師、周學正牧師、柳子駿牧師、葉豐軒牧師）"
+      ]
+    },
+    {
+      id: 2,
+      title: "VIP PASS",
+      startDate: "05.02",
+      endDate: "05.03",
+      startTime: "19:00",
+      endTime: "22:00",
+      quantity: 2,
+      orderNumber: "1139475024",
+      status: TICKET_STATUS.COLLECTED,
+      details: [
+        "特會全場次入場權限",
+        "VIP 座位區域",
+        "專屬休息區使用權"
+      ]
+    },
+    {
+      id: 3,
+      title: "GENERAL PASS",
+      startDate: "05.03",
+      endDate: "05.03",
+      startTime: "20:00",
+      endTime: "21:30",
+      quantity: 1,
+      orderNumber: "1139475025",
+      status: TICKET_STATUS.REFUNDED,
+      details: [
+        "特會當日入場權限",
+        "一般座位區域"
+      ]
+    }
   ];
 
   // 根據當前狀態過濾票券
@@ -110,75 +110,77 @@ const TicketsContent: React.FC = () => {
 
   // 組件邏輯
   return (
-    <div className="tickets-container">
-      <div className="tickets-header">
-        <h1>我的票券</h1>
-        <div className="ticket-header-status">
-          {ticketStatuses.map(status => (
-            <div
-              key={status.key}
-              className={`ticket-header-status-item ${activeStatus === status.key ? 'active' : ''}`}
-              onClick={() => handleStatusClick(status.key)}
-            >
-              <p className="status-title">{status.title}</p>
-              <div className="status-count-wrapper">
-                <p className="status-count">{status.count}</p>
+    <>
+      <div className="tickets-container">
+        <div className="tickets-header">
+          <h1>我的票券</h1>
+          <div className="ticket-header-status">
+            {ticketStatuses.map(status => (
+              <div
+                key={status.key}
+                className={`ticket-header-status-item ${activeStatus === status.key ? 'active' : ''}`}
+                onClick={() => handleStatusClick(status.key)}
+              >
+                <p className="status-title">{status.title}</p>
+                <div className="status-count-wrapper">
+                  <p className="status-count">{status.count}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="tickets-alert-container">
-        <div className="ticket-alert-title">
-          <img src="/src/assets/images/ticket-alert-dot.svg" alt="" />
-          <p>貼心提醒</p>
-        </div>
-        <div className="ticket-alert-content">{getAlertContent()}</div>
-      </div>
-      <div className="tickets-content-container">
-        {tickets.length === 0 ? (
-          <>
-            <img
-              src="/src/assets/images/ticket-sample.png"
-              alt=""
-              className="ticket-pic"
-            />
-            <p>{noTicketText()}</p>
-          </>
-        ) : (
-          <>
-            {tickets.map((ticket: any) => (
-              <TicketsCard
-                key={ticket.id}
-                title={ticket.title}
-                startDate={ticket.startDate}
-                endDate={ticket.endDate}
-                startTime={ticket.startTime}
-                endTime={ticket.endTime}
-                quantity={ticket.quantity}
-                orderNumber={ticket.orderNumber}
-                details={ticket.details}
-                status={ticket.status}
-              />
             ))}
-          </>
+          </div>
+        </div>
+        <div className="tickets-alert-container">
+          <div className="ticket-alert-title">
+            <img src="/src/assets/images/ticket-alert-dot.svg" alt="" />
+            <p>貼心提醒</p>
+          </div>
+          <div className="ticket-alert-content">{getAlertContent()}</div>
+        </div>
+        <div className="tickets-content-container">
+          {tickets.length === 0 ? (
+            <>
+              <img
+                src="/src/assets/images/ticket-sample.png"
+                alt=""
+                className="ticket-pic"
+              />
+              <p>{noTicketText()}</p>
+            </>
+          ) : (
+            <>
+              {tickets.map((ticket: any) => (
+                <TicketsCard
+                  key={ticket.id}
+                  title={ticket.title}
+                  startDate={ticket.startDate}
+                  endDate={ticket.endDate}
+                  startTime={ticket.startTime}
+                  endTime={ticket.endTime}
+                  quantity={ticket.quantity}
+                  orderNumber={ticket.orderNumber}
+                  details={ticket.details}
+                  status={ticket.status}
+                />
+              ))}
+            </>
+          )}
+        </div>
+        {tickets.length === 0 && (activeStatus === TICKET_STATUS.PURCHASED || activeStatus === TICKET_STATUS.COLLECTED) && (
+          <div className="tickets-btn-container">
+            {(activeStatus === TICKET_STATUS.PURCHASED || activeStatus === TICKET_STATUS.COLLECTED) && (
+              <button className="btn send-btn" onClick={() => navigate(ROUTES.BOOKING)}>
+                前往購票
+              </button>
+            )}
+            {activeStatus === TICKET_STATUS.COLLECTED && (
+              <button className="btn cancel-btn" onClick={() => navigate(ROUTES.MAIN)}>
+                返回票券系統
+              </button>
+            )}
+          </div>
         )}
       </div>
-      {tickets.length === 0 && (activeStatus === TICKET_STATUS.PURCHASED || activeStatus === TICKET_STATUS.COLLECTED) && (
-        <div className="tickets-btn-container">
-          {(activeStatus === TICKET_STATUS.PURCHASED || activeStatus === TICKET_STATUS.COLLECTED) && (
-            <button className="btn send-btn" onClick={() => navigate(ROUTES.BOOKING)}>
-              前往購票
-            </button>
-          )}
-          {activeStatus === TICKET_STATUS.COLLECTED && (
-            <button className="btn cancel-btn" onClick={() => navigate(ROUTES.MAIN)}>
-              返回票券系統
-            </button>
-          )}
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import './Login.scss';
 
 const OTP_TIMER_KEY = 'otpTimerEndTime';
 const EMAIL_KEY = 'loginEmail';
-const TIMER_DURATION = 2; // 5分鐘
+const TIMER_DURATION = 300; // 5分鐘
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');

@@ -35,25 +35,23 @@ const AppRouter = () => {
           path="/*"
           element={
             <AuthGuard>
-              <Layout>
-                <Routes>
-                  <Route path={ROUTES.HOME} element={<Main />} />
-                  <Route path={ROUTES.BOOKING} element={<Booking />} />
-                  <Route path={ROUTES.TICKETS} element={<Tickets />} />
-                  <Route path={ROUTES.PAYMENT} element={<Payment />} />
-                  <Route path={ROUTES.PROFILE} element={<Profile />} />
-                  <Route path={ROUTES.REFUND} element={<Refund />} />
-                  <Route
-                    path={ROUTES.TICKET_DISTRIBUTION}
-                    element={<TicketDistribution />}
-                  />
-                  {/* 捕獲所有未匹配的路由，重定向到首頁 */}
-                  <Route
-                    path="*"
-                    element={<Navigate to={ROUTES.HOME} replace />}
-                  />
-                </Routes>
-              </Layout>
+              <Routes>
+                <Route path={ROUTES.HOME} element={<Layout><Main /></Layout>} />
+                <Route path={ROUTES.BOOKING} element={<Layout><Booking /></Layout>} />
+                <Route path={ROUTES.TICKETS} element={<Layout showBreadCrumbs={true}><Tickets /></Layout>} />
+                <Route path={ROUTES.PAYMENT} element={<Layout><Payment /></Layout>} />
+                <Route path={ROUTES.PROFILE} element={<Layout><Profile /></Layout>} />
+                <Route path={ROUTES.REFUND} element={<Layout><Refund /></Layout>} />
+                <Route
+                  path={ROUTES.TICKET_DISTRIBUTION}
+                  element={<Layout><TicketDistribution /></Layout>}
+                />
+                {/* 捕獲所有未匹配的路由，重定向到首頁 */}
+                <Route
+                  path="*"
+                  element={<Navigate to={ROUTES.HOME} replace />}
+                />
+              </Routes>
             </AuthGuard>
           }
         />
