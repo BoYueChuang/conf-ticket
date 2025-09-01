@@ -1,4 +1,4 @@
-import { ROUTES } from "../constants/routes";
+import { ROUTES } from '../constants/routes';
 
 class FetchService {
   private baseURL: string;
@@ -68,9 +68,38 @@ class FetchService {
       }
 
       if (!response.ok) {
-        throw new Error(
-          `HTTP Error: ${response.status} ${response.statusText}`
-        );
+        // 處理各種錯誤狀態並附加回應資料
+        try {
+          const errorData = await response.json();
+
+          // 統一在這裡 alert 錯誤訊息
+          if (errorData.errors) {
+            // 處理欄位驗證錯誤格式
+            const errorMessages = errorData.errors
+              .map((err: { field: string; message: string }) => err.message)
+              .join('\n');
+            alert(errorMessages);
+          } else if (!errorData.success) {
+            // 處理一般錯誤格式
+            alert(errorData.message);
+          } else {
+            alert(`請求失敗: ${response.status} ${response.statusText}`);
+          }
+
+          const error = new Error(
+            `HTTP Error: ${response.status} ${response.statusText}`
+          );
+          (error as any).response = errorData;
+          (error as any).status = response.status;
+          throw error;
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (jsonError) {
+          // 如果無法解析 JSON，使用原始錯誤
+          alert(`請求失敗: ${response.status} ${response.statusText}`);
+          throw new Error(
+            `HTTP Error: ${response.status} ${response.statusText}`
+          );
+        }
       }
 
       if (response.status === 204) {
@@ -110,6 +139,13 @@ class FetchService {
     });
   }
 
+  async patch(endpoint: string, data: any) {
+    return this.request(endpoint, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  }
+
   async put(endpoint: string, data: any) {
     return this.request(endpoint, {
       method: 'PUT',
@@ -129,18 +165,47 @@ const EMAIL_KEY = 'loginEmail';
 export const apiService = {
   // 認證相關 API
   memberAuthentication: {
-    auth: async (email: { email: string }) => {
+    postAuth: async (email: { email: string }) => {
       const response = await fetchClient.post('/v1/auth', email);
       return response;
     },
   },
   members: {
-    members: async () => {
-      const response = await fetchClient.get(`/v1/members?page=1&limit=1&sort=-createdAt&where%5Bemail%5D%5Bequals%5D=${encodeURIComponent(localStorage.getItem(EMAIL_KEY) as string)}`);
+    getMembers: async () => {
+      const response = await fetchClient.get(
+        `/v1/members?page=1&limit=1&sort=-createdAt&where%5Bemail%5D%5Bequals%5D=${encodeURIComponent(localStorage.getItem(EMAIL_KEY) as string)}`
+      );
       return response;
     },
-  }
+    patchMembers: async (
+      id: string,
+      data: {
+        email: string;
+        name: string;
+        gender: string;
+        tel: string;
+        role: string;
+        location: string;
+      }
+    ) => {
+      const response = await fetchClient.patch(`/v1/members/${id}`, data);
+      return response;
+    },
+  },
+  payments: {
+    postPayments: async (data: {
+      prime: string;
+      amount: number;
+      name: string;
+      email: string;
+      telCountryCode?: string;
+      telNumber: string;
+      paymentType: string;
+    }) => {
+      const response = await fetchClient.post('/v1/payments', data);
+      return response;
+    },
+  },
 };
 
 export { fetchClient };
-

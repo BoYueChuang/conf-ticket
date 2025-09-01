@@ -9,6 +9,7 @@ import {
 } from '../../components/interface/TicketDistribution';
 import { ROUTES } from '../../constants/routes';
 import './TicketDistribution.scss';
+import { STATUS } from '../../constants/common';
 
 export const TicketDistribution: React.FC<TicketDistributionProps> = ({
   ticketInfo,
@@ -16,7 +17,7 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const [distributionStatus, setDistributionStatus] = useState<
-    'form' | 'success' | 'false'
+    'form' | 'success' | 'error'
   >('form');
 
   // 從路由狀態或 props 獲取票券資訊
@@ -147,7 +148,7 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
     });
 
     setTicketDistributionDialogOpen(false);
-    setDistributionStatus('false');
+    setDistributionStatus(STATUS.ERROR);
   };
 
   // Dialog 取消處理
@@ -266,8 +267,9 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
 
           <div className="distribution-footer">
             <button
-              className={`btn send-btn ${!hasValidEmail || !hasSelectedRecipients ? 'disabled' : ''
-                }`}
+              className={`btn send-btn ${
+                !hasValidEmail || !hasSelectedRecipients ? 'disabled' : ''
+              }`}
               type="submit"
               disabled={!hasValidEmail || !hasSelectedRecipients}
             >
@@ -284,9 +286,9 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
         </form>
       )}
 
-      {distributionStatus === 'success' && (
+      {distributionStatus === STATUS.SUCCESS && (
         <SuccessOrError
-          type="success"
+          type={STATUS.SUCCESS}
           useList={true}
           message="• 取件資訊已寄至您填寫的信箱，請通知取票者查收信件並開通票券。<br/>• 完成後可至「購票系統」→「我的票券」→「已取票」查看。"
           titlePrefix="分票"
@@ -296,7 +298,7 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
         />
       )}
 
-      {distributionStatus === 'false' && (
+      {distributionStatus === STATUS.ERROR && (
         <SuccessOrError
           type="error"
           message="系統發生錯誤，請再試一次。"
@@ -350,4 +352,3 @@ export const TicketDistribution: React.FC<TicketDistributionProps> = ({
     </>
   );
 };
-

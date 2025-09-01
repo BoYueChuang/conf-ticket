@@ -4,6 +4,7 @@ import Dialog from '../../components/common/Dialog/Dialog';
 import { SuccessOrError } from '../../components/common/SuccessOrError/SuccessOrError';
 import { ROUTES } from '../../constants/routes';
 import './Refund.scss';
+import { STATUS } from '../../constants/common';
 
 export const Refund: React.FC = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const Refund: React.FC = () => {
     React.useState(true);
   const [isCheckboxChecked, setIsCheckboxChecked] = React.useState(false);
   const [refundStatus, setRefundStatus] = useState<
-    'form' | 'success' | 'false'
+    'form' | 'success' | 'error'
   >('form');
 
   const handleRefundConfirm = () => {
@@ -30,7 +31,7 @@ export const Refund: React.FC = () => {
 
   // 確定退票
   const handleRefund = () => {
-    setRefundStatus('success');
+    setRefundStatus(STATUS.SUCCESS);
   };
 
   // 組件邏輯
@@ -50,11 +51,14 @@ export const Refund: React.FC = () => {
                     <span className="number">1.</span>退款將會酌收10%手續費
                   </li>
                   <li>
-                    <span className="number">2.</span>將於 20 個工作天退款至原先付款的方式
+                    <span className="number">2.</span>將於 20
+                    個工作天退款至原先付款的方式
                   </li>
                   <li>
                     <span className="number">3.</span>
-                    辦理退票後，銀行入帳時間會因機構不同略有差異，請以銀行回報為準。若原付款交易超過 180 天，因銀行端技術限制可能需透過其他方式退費，具體方式將另行通知。
+                    辦理退票後，銀行入帳時間會因機構不同略有差異，請以銀行回報為準。若原付款交易超過
+                    180
+                    天，因銀行端技術限制可能需透過其他方式退費，具體方式將另行通知。
                   </li>
                   <li>
                     <span className="number">4.</span>
@@ -209,9 +213,9 @@ export const Refund: React.FC = () => {
           </Dialog>
         </div>
       )}
-      {refundStatus === 'success' && (
+      {refundStatus === STATUS.SUCCESS && (
         <SuccessOrError
-          type="success"
+          type={STATUS.SUCCESS}
           useList={true}
           message="• 取件資訊已寄至您填寫的信箱，請通知取票者查收信件並開通票券。<br/>• 完成後可至「購票系統」→「我的票券」→「已取票」查看。"
           titlePrefix="分票"
@@ -221,9 +225,9 @@ export const Refund: React.FC = () => {
         />
       )}
 
-      {refundStatus === 'false' && (
+      {refundStatus === STATUS.ERROR && (
         <SuccessOrError
-          type="error"
+          type={STATUS.ERROR}
           message="系統發生錯誤，請再試一次。"
           titlePrefix="分票"
           errorText="失敗"
@@ -236,4 +240,3 @@ export const Refund: React.FC = () => {
     </>
   );
 };
-

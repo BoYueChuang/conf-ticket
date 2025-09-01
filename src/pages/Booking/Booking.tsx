@@ -187,7 +187,12 @@ export const Booking: React.FC = () => {
         >
           下一步
         </button>
-        <button className="btn cancel-btn">返回票券系統</button>
+        <button
+          className="btn cancel-btn"
+          onClick={() => navigate(ROUTES.HOME)}
+        >
+          返回票券系統
+        </button>
       </div>
     </div>
   );

@@ -2,12 +2,13 @@ import React from 'react';
 import { TicketInfo } from '../../../constants/tickets';
 import { QuantitySelector } from '../QuantitySelector/QuantitySelector';
 import './TicketItem.scss';
+import { MODE } from '../../../constants/common';
 
 interface TicketItemProps {
   ticket: TicketInfo;
   quantity: number;
   mode: string;
-  onQuantityChange: (id: string, quantity: number) => void;
+  onQuantityChange?: (id: string, quantity: number) => void;
 }
 
 export const TicketItem: React.FC<TicketItemProps> = ({
@@ -17,7 +18,7 @@ export const TicketItem: React.FC<TicketItemProps> = ({
   onQuantityChange,
 }) => {
   const handleQuantityChange = (newQuantity: number) => {
-    onQuantityChange(ticket.id, newQuantity);
+    onQuantityChange?.(ticket.id, newQuantity);
   };
 
   return (
@@ -28,17 +29,21 @@ export const TicketItem: React.FC<TicketItemProps> = ({
             src={ticket.image}
             alt={ticket.name}
             className={
-              mode === 'edit' ? 'edit-ticket-pic' : 'record-ticket-pic'
+              mode === MODE.EDIT ? 'edit-ticket-pic' : 'record-ticket-pic'
             }
           />
         </div>
         <div className="booking-content-item-right">
           <div className="ticket-info">
             <div className="ticket-info-title">
-              <span className={mode === 'edit' ? 'edit-title' : 'record-title'}>
+              <span
+                className={mode === MODE.EDIT ? 'edit-title' : 'record-title'}
+              >
                 {ticket.name}
               </span>
-              <span className={mode === 'edit' ? 'edit-title' : 'record-title'}>
+              <span
+                className={mode === MODE.EDIT ? 'edit-title' : 'record-title'}
+              >
                 ${ticket.price.toLocaleString()}
               </span>
               {ticket.remark && (
@@ -77,7 +82,7 @@ export const TicketItem: React.FC<TicketItemProps> = ({
             </ul>
           </div>
           <div className="ticket-quantity">
-            {mode === 'edit' ? (
+            {mode === MODE.EDIT ? (
               <QuantitySelector
                 initialValue={quantity}
                 onChange={handleQuantityChange}

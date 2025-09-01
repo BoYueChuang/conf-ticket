@@ -1,5 +1,6 @@
 import React from 'react';
 import './SuccessOrError.scss';
+import { STATUS } from '../../../constants/common';
 
 interface SuccessOrErrorProps {
   type?: 'success' | 'error';
@@ -17,7 +18,7 @@ interface SuccessOrErrorProps {
 }
 
 export const SuccessOrError: React.FC<SuccessOrErrorProps> = ({
-  type = 'success',
+  type = STATUS.SUCCESS,
   message = '',
   useList = false,
   titlePrefix = '退票',
@@ -34,13 +35,13 @@ export const SuccessOrError: React.FC<SuccessOrErrorProps> = ({
     <div className="success-error-container">
       <div className="success-error-content-container">
         <img
-          src={`${type === 'success' ? '/src/assets/images/success.svg' : '/src/assets/images/error.svg'}`}
+          src={`${type === STATUS.SUCCESS ? '/src/assets/images/success.svg' : '/src/assets/images/error.svg'}`}
           alt=""
           className="success-error-icon"
         />
         <h1 className="success-error-title">
           {titlePrefix}
-          {type === 'success' ? successText : errorText}
+          {type === STATUS.SUCCESS ? successText : errorText}
         </h1>
         {useList ? (
           <ul
@@ -68,11 +69,11 @@ export const SuccessOrError: React.FC<SuccessOrErrorProps> = ({
       <div className="success-error-btn-container">
         <button
           className="btn send-btn"
-          onClick={type === 'success' ? onSuccessClick : onRetryClick}
+          onClick={type === STATUS.SUCCESS ? onSuccessClick : onRetryClick}
         >
-          {type === 'success' ? successButtonText : retryButtonText}
+          {type === STATUS.SUCCESS ? successButtonText : retryButtonText}
         </button>
-        {type === 'error' && (
+        {type === STATUS.ERROR && (
           <button className="btn cancel-btn" onClick={onBackClick}>
             {backButtonText}
           </button>

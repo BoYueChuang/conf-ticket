@@ -104,7 +104,7 @@ export const Login: React.FC = () => {
       }
 
       // 調用發送 OTP 的 API
-      await apiService.memberAuthentication.auth({ email });
+      await apiService.memberAuthentication.postAuth({ email });
 
       // 成功後切換到 OTP 輸入階段
       setIsEmailSubmitted(true);
@@ -124,7 +124,9 @@ export const Login: React.FC = () => {
     try {
       setIsLoading(true);
 
-      const response = await apiService.memberAuthentication.auth({ email });
+      const response = await apiService.memberAuthentication.postAuth({
+        email,
+      });
       resetTimer();
       console.log('OTP 發送成功：', response);
     } catch (error: any) {
@@ -218,4 +220,3 @@ export const Login: React.FC = () => {
     </div>
   );
 };
-

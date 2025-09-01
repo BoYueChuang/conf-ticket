@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Notification.scss';
+import { STATUS } from '../../../constants/common';
 
 interface NotificationProps {
   status?: 'success' | 'error' | 'warning' | 'info';
@@ -8,7 +9,7 @@ interface NotificationProps {
 }
 
 export const NotificationMessage: React.FC<NotificationProps> = ({
-  status = 'success',
+  status = STATUS.SUCCESS,
   text = '您已成功註冊The Hope Conference票券系統會員。',
   onClose,
 }) => {
@@ -35,7 +36,7 @@ export const NotificationMessage: React.FC<NotificationProps> = ({
 
   const getIcon = () => {
     switch (status) {
-      case 'success':
+      case STATUS.SUCCESS:
         return <i className="success-icon" />;
       default:
         return null;

@@ -48,6 +48,16 @@ app.get('/v1/members', (req, res) => {
   res.json(login);
 });
 
+app.patch('/v1/members/:memberId', (req, res) => {
+  const login = readDB('members.json');
+  res.json(login);
+});
+
+app.post('/v1/payments', (req, res) => {
+  const login = readDB('postPayments.json');
+  res.json(login);
+});
+
 // 錯誤處理
 app.use((err, req, res, next) => {
   console.error('❌ Server Error:', err);

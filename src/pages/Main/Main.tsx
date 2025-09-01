@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { NotificationMessage } from '../../components/common/Notification/Notification';
 import { ROUTES } from '../../constants/routes';
 import './Main.scss';
+import { STATUS } from '../../constants/common';
 
 export const Main: React.FC = () => {
   const [showNotification, setShowNotification] = useState('');
@@ -23,7 +24,7 @@ export const Main: React.FC = () => {
     <>
       {showNotification && (
         <NotificationMessage
-          status="success"
+          status={STATUS.SUCCESS}
           text="您的個人檔案已儲存成功"
           onClose={() => setShowNotification('')}
         />

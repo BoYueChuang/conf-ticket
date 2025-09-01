@@ -18,14 +18,18 @@ import { usePaymentMethods } from '../../hooks/usePaymentMethods';
 import { usePaymentState } from '../../hooks/usePaymentState';
 import { useTapPay } from '../../hooks/useTapPay';
 
+import { apiService } from '../../api/fetchService';
 import { ROUTES } from '../../constants/routes';
+import { useAuthContext } from '../../contexts/AuthContext';
 import './Payment.scss';
+import { MODE, STATUS } from '../../constants/common';
 
 export const Payment: React.FC = () => {
+  const { user } = useAuthContext();
   const navigate = useNavigate();
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<
-    'form' | 'success' | 'false'
+    'form' | 'success' | 'error'
   >('form');
   const [creditCardStatus, setCreditCardStatus] = useState<CreditCardStatus>({
     number: '',
@@ -44,7 +48,8 @@ export const Payment: React.FC = () => {
   const { setupGooglePay, setupApplePay, setupSamsungPay } = usePaymentMethods(
     paymentData!,
     updatePaymentReady,
-    setPaymentStatus
+    setPaymentStatus,
+    user
   );
 
   const {
@@ -75,17 +80,52 @@ export const Payment: React.FC = () => {
     loadPaymentData();
   }, [navigate]);
 
-  // Event handlers
-  const handleBackToBooking = () => navigate(ROUTES.BOOKING);
-  const handlePayment = () => {
-    setPaymentStatus('false');
-    console.log('處理付款:', paymentData);
+  const handleCreditCardPayment = () => {
+    if (!paymentData || !user) {
+      setPaymentStatus('error');
+      return;
+    }
+
+    // 檢查信用卡欄位狀態
+    const tappayStatus = TPDirect.card.getTappayFieldsStatus();
+    const isValidCard =
+      tappayStatus.status.number === 0 &&
+      tappayStatus.status.expiry === 0 &&
+      tappayStatus.status.ccv === 0;
+
+    if (!isValidCard) {
+      alert('請檢查信用卡資訊是否正確填寫');
+      return;
+    }
+
+    TPDirect.card.getPrime(async (result: any) => {
+      if (result.status !== 0) {
+        alert('信用卡資訊驗證失敗，請重新檢查');
+        setPaymentStatus('error');
+        return;
+      }
+
+      try {
+        await apiService.payments.postPayments({
+          prime: result.card.prime,
+          amount: paymentData.summary.totalAmount,
+          name: user.name,
+          email: user.email,
+          telNumber: user.tel,
+          paymentType: PAYMENT_TYPES.CREDIT_CARD,
+        });
+        setPaymentStatus(STATUS.SUCCESS);
+      } catch (error) {
+        console.error('Payment failed:', error);
+        setPaymentStatus('error');
+      }
+    });
   };
-  const handleQuantityChange = () => {};
-  const handleGroupPassFormChange = () => {};
 
   // Computed values
   const { groupPassTicket, groupPassQuantity } = useMemo(() => {
+    console.log(groupPassTicket);
+
     if (!paymentData) return { groupPassTicket: null, groupPassQuantity: 0 };
 
     const ticket = paymentData.tickets.find(
@@ -98,7 +138,7 @@ export const Payment: React.FC = () => {
   }, [paymentData]);
 
   if (!paymentData) {
-    return null;
+    return <div className="loading">載入中...</div>;
   }
 
   return (
@@ -120,17 +160,15 @@ export const Payment: React.FC = () => {
                     return (
                       <div key={ticket.id} className="booking-group-pass-item">
                         <TicketItem
-                          mode="view"
+                          mode={MODE.VIEW}
                           ticket={ticketInfo}
                           quantity={ticket.selectedQuantity}
-                          onQuantityChange={handleQuantityChange}
                         />
                         {paymentData.groupPassFormData.length > 0 && (
                           <GroupPassForm
-                            mode="view"
+                            mode={MODE.VIEW}
                             quantity={groupPassQuantity}
                             formData={paymentData.groupPassFormData}
-                            onFormDataChange={handleGroupPassFormChange}
                           />
                         )}
                       </div>
@@ -143,7 +181,6 @@ export const Payment: React.FC = () => {
                       mode="view"
                       ticket={ticketInfo}
                       quantity={ticket.selectedQuantity}
-                      onQuantityChange={handleQuantityChange}
                     />
                   );
                 })}
@@ -176,7 +213,10 @@ export const Payment: React.FC = () => {
           {/* 按鈕區 */}
           <div className="payment-buttons">
             {paymentType === PAYMENT_TYPES.CREDIT_CARD ? (
-              <button className="btn send-btn" onClick={handlePayment}>
+              <button
+                className="btn send-btn"
+                onClick={handleCreditCardPayment}
+              >
                 前往付款
               </button>
             ) : (
@@ -192,16 +232,19 @@ export const Payment: React.FC = () => {
                 />
               </div>
             )}
-            <button className="btn cancel-btn" onClick={handleBackToBooking}>
+            <button
+              className="btn cancel-btn"
+              onClick={() => navigate(ROUTES.BOOKING)}
+            >
               返回修改
             </button>
           </div>
         </div>
       )}
 
-      {paymentStatus === 'success' && (
+      {paymentStatus === STATUS.SUCCESS && (
         <SuccessOrError
-          type="success"
+          type={STATUS.SUCCESS}
           message="票券已購買成功，請前往我的票券查看。<br/>如需開立發票請寄信至conf@thehope.co"
           titlePrefix="購買"
           successText="成功"
@@ -210,9 +253,9 @@ export const Payment: React.FC = () => {
         />
       )}
 
-      {paymentStatus === 'false' && (
+      {paymentStatus === STATUS.ERROR && (
         <SuccessOrError
-          type="error"
+          type={STATUS.ERROR}
           message="系統發生錯誤，請再試一次。"
           titlePrefix="購買"
           errorText="失敗"

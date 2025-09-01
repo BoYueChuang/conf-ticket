@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
+import { apiService } from '../api/fetchService';
+import { PAYMENT_TYPES, SUPPORTED_NETWORKS } from '../constants/payment';
 import { PaymentData, PaymentReadyState } from '../types/payment';
-import { SUPPORTED_NETWORKS } from '../constants/payment';
+import { STATUS } from '../constants/common';
 
 declare global {
   interface Window {
@@ -11,53 +13,27 @@ declare global {
 export const usePaymentMethods = (
   paymentData: PaymentData,
   updatePaymentReady: (updates: Partial<PaymentReadyState>) => void,
-  setPaymentStatus: (status: 'form' | 'success' | 'false') => void
+  setPaymentStatus: (status: 'form' | 'success' | 'error') => void,
+  user: any
 ) => {
   const processPayment = useCallback(
-    async (prime: string, lastFour: string, amount: number) => {
+    async (prime: string) => {
       try {
-        console.log('✅ 付款中');
-
-        const response = await fetch(
-          'https://confgive.thehope.app/api/payment',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              prime,
-              amount,
-              cardholder: {
-                last_four: lastFour,
-                name: 'sss',
-              },
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `HTTP Error: ${response.status} ${response.statusText}`
-          );
-        }
-
-        const result = await response.json();
-
-        if (result.status === 0) {
-          console.log('✅ 付款成功');
-          setPaymentStatus('success');
-          return { success: true, data: result };
-        } else {
-          console.log('❌ 付款失敗:', result);
-          setPaymentStatus('false');
-          return { success: false, error: result.message || '付款失敗' };
-        }
+        await apiService.payments.postPayments({
+          prime: prime,
+          amount: paymentData.summary.totalAmount,
+          name: user.name,
+          email: user.email,
+          telNumber: user.tel,
+          paymentType: PAYMENT_TYPES.CREDIT_CARD,
+        });
+        setPaymentStatus(STATUS.SUCCESS);
       } catch (error) {
-        console.log('❌ 錯誤：', error);
-        setPaymentStatus('false');
-        return { success: false, error };
+        console.error('Payment failed:', error);
+        setPaymentStatus('error');
       }
     },
-    [setPaymentStatus]
+    [setPaymentStatus, paymentData, user]
   );
 
   const setupGooglePay = useCallback(() => {
@@ -84,14 +60,12 @@ export const usePaymentMethods = (
             if (err) {
               console.error('Google Pay getPrime error:', err);
               alert('此裝置不支援 Google Pay');
-              setPaymentStatus('false');
+              setPaymentStatus('error');
               return;
             }
-            processPayment(prime, '', paymentData.summary.totalAmount).catch(
-              error => {
-                console.error('Google Pay processPayment error:', error);
-              }
-            );
+            processPayment(prime).catch(error => {
+              console.error('Google Pay processPayment error:', error);
+            });
           });
         }
       }
@@ -153,11 +127,7 @@ export const usePaymentMethods = (
         window.TPDirect.paymentRequestApi.setupTappayPaymentButton(
           '#apple-pay-button-container',
           (getPrimeResult: any) => {
-            processPayment(
-              getPrimeResult.prime,
-              getPrimeResult.card.lastfour,
-              paymentData.summary.totalAmount
-            ).catch(error => {
+            processPayment(getPrimeResult.prime).catch(error => {
               console.error('Apple Pay processPayment error:', error);
             });
           }
@@ -187,15 +157,11 @@ export const usePaymentMethods = (
       if (result.status !== 0) {
         console.error('Samsung Pay error:', result);
         alert('此裝置不支援 Samsung Pay');
-        setPaymentStatus('false');
+        setPaymentStatus('error');
         return;
       }
 
-      processPayment(
-        result.prime,
-        result.card.lastfour,
-        paymentData.summary.totalAmount
-      ).catch(error => {
+      processPayment(result.prime).catch(error => {
         console.error('Samsung Pay processPayment error:', error);
       });
     });

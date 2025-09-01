@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 import EnvironmentPlugin from 'vite-plugin-environment';
 
 export default defineConfig({
@@ -27,7 +27,8 @@ export default defineConfig({
     allowedHosts: ['localhost', '127.0.0.1'],
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'hrtp://localhost:3001',
+        // target: 'http://ticket.thehope.co',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, ''),
       },

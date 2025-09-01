@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import './GroupPassForm.scss';
+import { MODE } from '../../../constants/common';
 
 export interface GroupPassFormData {
   name: string;
@@ -12,7 +13,7 @@ export interface GroupPassFormData {
 interface GroupPassFormProps {
   quantity: number;
   mode: string;
-  onFormDataChange: (index: number, formData: GroupPassFormData) => void;
+  onFormDataChange?: (index: number, formData: GroupPassFormData) => void;
   onValidationChange?: (isValid: boolean) => void;
   formData?: GroupPassFormData[];
 }
@@ -160,7 +161,7 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
         className={`group-pass-form-title ${mode !== 'edit' && 'group-pass-form-record-title'}`}
       >
         {' '}
-        {mode === 'edit'
+        {mode === MODE.EDIT
           ? '請填寫實際使用此票券者之資訊'
           : '請確認實際使用此票券者之資訊'}{' '}
       </p>
@@ -193,11 +194,11 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
             <div className="group-pass-form-input">
               <div className="form-item">
                 <div
-                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                  className={`form-label ${mode === MODE.EDIT ? 'p-l-6' : 'form-record-label'}`}
                 >
                   <label htmlFor={`name-${index}`}>使用者姓名</label>
                 </div>
-                {mode === 'edit' ? (
+                {mode === MODE.EDIT ? (
                   <>
                     <input
                       id={`name-${index}`}
@@ -227,11 +228,11 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
               </div>
               <div className="form-item">
                 <div
-                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                  className={`form-label ${mode === MODE.EDIT ? 'p-l-6' : 'form-record-label'}`}
                 >
                   <label htmlFor={`email-${index}`}>電子郵件</label>
                 </div>
-                {mode === 'edit' ? (
+                {mode === MODE.EDIT ? (
                   <>
                     <input
                       id={`email-${index}`}
@@ -263,11 +264,11 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
             <div className="group-pass-form-input">
               <div className="form-item">
                 <div
-                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                  className={`form-label ${mode === MODE.EDIT ? 'p-l-6' : 'form-record-label'}`}
                 >
                   <label htmlFor={`church-${index}`}>所屬教會名稱</label>
                 </div>
-                {mode === 'edit' ? (
+                {mode === MODE.EDIT ? (
                   <>
                     <input
                       id={`church-${index}`}
@@ -295,11 +296,11 @@ export const GroupPassForm: React.FC<GroupPassFormProps> = ({
               </div>
               <div className="form-item">
                 <div
-                  className={`form-label ${mode === 'edit' ? 'p-l-6' : 'form-record-label'}`}
+                  className={`form-label ${mode === MODE.EDIT ? 'p-l-6' : 'form-record-label'}`}
                 >
                   <label htmlFor={`phone-${index}`}>所屬教會電話</label>
                 </div>
-                {mode === 'edit' ? (
+                {mode === MODE.EDIT ? (
                   <>
                     <input
                       id={`phone-${index}`}
