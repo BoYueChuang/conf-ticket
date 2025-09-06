@@ -6,22 +6,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRouteContent: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const { isLoading, isAuthenticated } = useAuthContext();
-
-    // 顯示載入中狀態
-    if (isLoading) {
-        return (
-            <div className="loading-container" style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                fontSize: '16px'
-            }}>
-                驗證中...
-            </div>
-        );
-    }
+    const { isAuthenticated } = useAuthContext();
 
     // 如果已驗證，顯示子組件
     if (isAuthenticated) {
@@ -35,9 +20,8 @@ const ProtectedRouteContent: React.FC<ProtectedRouteProps> = ({ children }) => {
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return (
         <AuthProvider>
-            <ProtectedRouteContent>
-                {children}
-            </ProtectedRouteContent>
+            <ProtectedRouteContent>{children}</ProtectedRouteContent>
         </AuthProvider>
     );
 };
+

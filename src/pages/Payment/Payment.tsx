@@ -9,7 +9,6 @@ import { TicketItem } from '../../components/common/TicketItem/TicketItem';
 
 // Constants and types
 import { PAYMENT_TYPES } from '../../constants/payment';
-import { TICKET_TYPES } from '../../constants/tickets';
 import { CreditCardStatus, PaymentData } from '../../types/payment';
 
 // Custom hooks
@@ -19,10 +18,10 @@ import { usePaymentState } from '../../hooks/usePaymentState';
 import { useTapPay } from '../../hooks/useTapPay';
 
 import { apiService } from '../../api/fetchService';
+import { MODE, STATUS } from '../../constants/common';
 import { ROUTES } from '../../constants/routes';
 import { useAuthContext } from '../../contexts/AuthContext';
 import './Payment.scss';
-import { MODE, STATUS } from '../../constants/common';
 
 export const Payment: React.FC = () => {
   const { user } = useAuthContext();
@@ -82,7 +81,13 @@ export const Payment: React.FC = () => {
 
   const handleCreditCardPayment = () => {
     if (!paymentData || !user) {
-      setPaymentStatus('error');
+      setPaymentStatus(STATUS.ERROR);
+      return;
+    }
+
+    // 檢查用戶是否有完整資料，如果沒有先導向 profile 頁面
+    if (!user.name) {
+      navigate(ROUTES.PROFILE);
       return;
     }
 
@@ -101,7 +106,7 @@ export const Payment: React.FC = () => {
     TPDirect.card.getPrime(async (result: any) => {
       if (result.status !== 0) {
         alert('信用卡資訊驗證失敗，請重新檢查');
-        setPaymentStatus('error');
+        setPaymentStatus(STATUS.ERROR);
         return;
       }
 
@@ -117,25 +122,25 @@ export const Payment: React.FC = () => {
         setPaymentStatus(STATUS.SUCCESS);
       } catch (error) {
         console.error('Payment failed:', error);
-        setPaymentStatus('error');
+        setPaymentStatus(STATUS.ERROR);
       }
     });
   };
 
   // Computed values
-  const { groupPassTicket, groupPassQuantity } = useMemo(() => {
-    console.log(groupPassTicket);
+  const { groupPassTicket: _groupPassTicket, groupPassQuantity } =
+    useMemo(() => {
+      if (!paymentData) return { groupPassTicket: null, groupPassQuantity: 0 };
 
-    if (!paymentData) return { groupPassTicket: null, groupPassQuantity: 0 };
+      const ticket = paymentData.tickets.find(
+        ticket => ticket.isMemberInfoRequired
+      );
 
-    const ticket = paymentData.tickets.find(
-      ticket => TICKET_TYPES.find(t => t.id === ticket.id)?.isGroupPass
-    );
-    return {
-      groupPassTicket: ticket || null,
-      groupPassQuantity: ticket?.selectedQuantity || 0,
-    };
-  }, [paymentData]);
+      return {
+        groupPassTicket: ticket || null,
+        groupPassQuantity: ticket?.selectedQuantity || 0,
+      };
+    }, [paymentData]);
 
   if (!paymentData) {
     return <div className="loading">載入中...</div>;
@@ -153,22 +158,20 @@ export const Payment: React.FC = () => {
               <h2>請確認您選購的票券類型與數量</h2>
               <div className="ticket-list">
                 {paymentData.tickets.map(ticket => {
-                  const ticketInfo = TICKET_TYPES.find(t => t.id === ticket.id);
-                  if (!ticketInfo) return null;
-
-                  if (ticketInfo.isGroupPass) {
+                  if (ticket.isMemberInfoRequired) {
+                    const ticketFormData = paymentData.groupPassFormData[ticket.id] || [];
                     return (
                       <div key={ticket.id} className="booking-group-pass-item">
                         <TicketItem
                           mode={MODE.VIEW}
-                          ticket={ticketInfo}
+                          ticket={ticket}
                           quantity={ticket.selectedQuantity}
                         />
-                        {paymentData.groupPassFormData.length > 0 && (
+                        {ticketFormData.length > 0 && (
                           <GroupPassForm
                             mode={MODE.VIEW}
-                            quantity={groupPassQuantity}
-                            formData={paymentData.groupPassFormData}
+                            quantity={ticket.selectedQuantity}
+                            formData={ticketFormData}
                           />
                         )}
                       </div>
@@ -179,7 +182,7 @@ export const Payment: React.FC = () => {
                     <TicketItem
                       key={ticket.id}
                       mode="view"
-                      ticket={ticketInfo}
+                      ticket={ticket}
                       quantity={ticket.selectedQuantity}
                     />
                   );
@@ -268,3 +271,4 @@ export const Payment: React.FC = () => {
     </>
   );
 };
+

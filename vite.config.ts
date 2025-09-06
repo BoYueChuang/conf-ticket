@@ -27,10 +27,20 @@ export default defineConfig({
     allowedHosts: ['localhost', '127.0.0.1'],
     proxy: {
       '/api': {
-        target: 'hrtp://localhost:3001',
-        // target: 'http://ticket.thehope.co',
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ''),
+
+        // NOTE: 本機開發時，正式環境的 API 網域
+        // NOTE: 本機開發時，設定 headers 以解決後端設定的 CORS 問題
+
+        target: 'http://thehope.app',
+        headers: {
+          Origin: 'https://thehope.app',
+          Referer: 'https://thehope.app',
+        },
+
+        // NOTE: 本機開發時，若有 mock server，則改為指向 mock server
+        // target: 'http://localhost:3001',
+        // rewrite: path => path.replace(/^\/api/, ''),
       },
     },
   },

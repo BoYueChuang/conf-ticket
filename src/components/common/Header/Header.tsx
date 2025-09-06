@@ -6,8 +6,8 @@ export interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title: _title = 'CONF TICKET' }) => {
-  // local storage 裡是否有 auth_token
-  const token = localStorage.getItem('auth_token');
+  // local storage 裡是否有 token
+  const token = localStorage.getItem('token');
 
   return (
     <>
